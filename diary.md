@@ -1,3 +1,9 @@
+## Week 5 (27/10/2025)
+
+- Load and test the 1NN algorithm with Iris dataset.
+- Evulate the accuracy score of the dataset to examine the model's performance.
+- Tested with new unlabeled data.
+
 ## Week 4 (24/10/2025)
 
 - Implemented 1NN algorithm from scratch using simple artificial dataset.
