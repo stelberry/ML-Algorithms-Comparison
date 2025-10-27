@@ -13,7 +13,7 @@
 - Chapter 1 explains the basic concept of machine learning.
 - Chapter 2 explains the difference between supervised and unsupervised learning, classification and regression algorithms like k-Nearest Neighbors, Linear Models, Support Vector Machines(SVM), and Decision Trees.
 - Chapter 3 explains algorithms such as k-Means clustering and Principal Component Analysis(PCA) for data visualisation and dimensionality reduction, and covers data preprocessing techniques.
-- Learn the foundations of ML and how algorithms are categorized, how to implement and evaluate basic models in scikit-learn, and the importance of data preparation and model evaluation for accurate ML results.
+- Learned the foundations of ML and how algorithms are categorized, how to implement and evaluate basic models in scikit-learn, and the importance of data preparation and model evaluation for accurate ML results.
 
 ## Week 2 (9/10/2025)
 
