@@ -1,3 +1,9 @@
+## Week 5 (01/10/2025)
+
+- Implemented kNN algorithm and tested with artificial simple dataset.
+- Handled ties in kNN.
+- Implemented tie-breaking by choosing randomly and alphabetically.
+
 ## Week 5 (27/10/2025)
 
 - Load and test the 1NN algorithm with Iris dataset.

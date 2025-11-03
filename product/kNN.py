@@ -17,7 +17,7 @@ def predict_kNN(dataset, labels, test_point, k):
   prediction = np.random.choice(k_nearest_labels)
   return prediction"""
   
-  # explicitly choose the distance 
+  # choose alphabetically 
   unique_labels, counts = np.unique(k_nearest_labels, return_counts = True)
   max_count_index = np.argmax(counts)
   prediction = unique_labels[max_count_index]
