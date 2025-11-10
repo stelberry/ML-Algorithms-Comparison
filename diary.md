@@ -1,3 +1,9 @@
+## Week 6 (03/10/2025)
+
+- Implemented Conformal Predictor that calculate the alpha = d_diff/d_same (distance to nearest different-class neighbor / distance to nearest same-class neighbor)
+- Use this conformity score function to calculate p-values and avearage false p-value
+- Will function it with the actual dataset in week 7
+
 ## Week 5 (01/10/2025)
 
 - Implemented kNN algorithm and tested with artificial simple dataset.
