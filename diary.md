@@ -1,3 +1,21 @@
+## Week 6 (07/10/2025)
+
+- Implemented a new tie-breaking strategy
+- It resolves a k-NN voting tie by selecting the label of the single neighbor that is closest to the test point among the tied classes.
+- **Counter** code implements this because it counts the labels which are already sorted by distance, and most_common(1) picks the one it saw first when the vote counts are tied.
+
+## Week 6 (03/10/2025)
+
+- Implemented Conformal Predictor that calculate the alpha = d_diff/d_same (distance to nearest different-class neighbor / distance to nearest same-class neighbor)
+- Use this conformity score function to calculate p-values and avearage false p-value
+- Will function it with the actual dataset in week 7
+
+## Week 5 (01/10/2025)
+
+- Implemented kNN algorithm and tested with artificial simple dataset.
+- Handled ties in kNN.
+- Implemented tie-breaking by choosing randomly and alphabetically.
+
 ## Week 5 (27/10/2025)
 
 - Load and test the 1NN algorithm with Iris dataset.

@@ -1,6 +1,6 @@
 import numpy as np
 
-#import and load iris datasetensures that the 
+#import and load iris dataset 
 from sklearn.datasets import load_iris
 iris = load_iris()
 X = iris['data']
@@ -10,9 +10,9 @@ y = iris['target']
 from sklearn.model_selection import train_test_split
 X_train, X_test, y_train, y_test = train_test_split(X,y, random_state = 0)
 
-print("Original dataset shape X: ",X.shape)
-print("Training data shape X_train: ",X_train.shape)
-print("Testing data shape X_test: ",X_test.shape)
+print("Original dataset shape X:",X.shape)
+print("Training data shape X_train:",X_train.shape)
+print("Testing data shape X_test:",X_test.shape)
 
 #1NN Function
 def predict_1nn (dataset, label, test_point):
