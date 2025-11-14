@@ -63,11 +63,12 @@ print("Target name of the new data: ", iris['target_names'][prediction])
 fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 5))
 
 #plot actual labels
-for i in range(3): #loop 3 times since there are 3 types of flowers (0 = Setosa, 1 = Versicolor, and 2 = Virginica).
-    is_current_flower = y_test == i #create a filter to find matching the current flower
-    #get sepal length(col 0), only for the current one(is_current_flower)
-    #get sepal width(col 1), only for the current one(is_current_flower)
-    ax1.scatter(X_test[is_current_flower, 0], X_test[is_current_flower, 1], 
+for i in range(3): #loop 3 times since there are 3 types of species (0 = Setosa, 1 = Versicolor, and 2 = Virginica).
+    #create a filter to find matching the current species (eg.[True, True, False,...])
+    is_current_species = y_test == i 
+    #get sepal length(col 0), only for the current one(is_current_species)
+    #get sepal width(col 1), only for the current one(is_current_species)
+    ax1.scatter(X_test[is_current_species, 0], X_test[is_current_species, 1], 
                 label=iris['target_names'][i], alpha=0.7)
                 
 ax1.set_title("Actual Labels")
@@ -78,8 +79,8 @@ ax1.legend()
 #plot predicted labels
 #use the same logic
 for i in range(3):
-    is_current_flower = y_pred == i
-    ax2.scatter(X_test[is_current_flower, 0], X_test[is_current_flower, 1], 
+    is_current_species = y_pred == i
+    ax2.scatter(X_test[is_current_species, 0], X_test[is_current_species, 1], 
                 label=iris['target_names'][i], alpha=0.7)
                 
 ax2.set_title("Predicted Labels")

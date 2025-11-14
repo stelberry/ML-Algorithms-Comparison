@@ -56,3 +56,29 @@ X_new = np.array([6.0, 4.1, 5.0, 1.2])
 prediction = predict_knn(X_train, y_train, X_new, k= 5)
 print("Predicted label of the new data: ", prediction)
 print("Target name of the new data: ", iris['target_names'][prediction])
+
+# array to store each species accuracy
+species_accuracies = []
+names = iris['target_names']
+count = 0
+
+# Figure of Accuracy per species(flower type)
+# loop 3 times (0 = Setosa, 1 = Versicolor, 2 = Virginica)
+for i in range(3):
+  # filter the current_species, return boolean array (eg.[True, True, False,...])
+  is_current_species = y_test == i
+  # same logic as calculating accuracy score from above
+  accuracy = np.mean(y_test[is_current_species] == y_pred[is_current_species])
+  # store 3 scores of each species
+  species_accuracies.append(accuracy)
+
+plt.figure(figsize=(8, 5))
+bars = plt.bar(names, species_accuracies, color=['violet', 'purple', 'plum'])
+
+plt.title("Prediction Accuracy by Flower Type")
+plt.ylabel("Accuracy (0-1)")
+plt.ylim(0, 1.1) # Make space for bar lables
+plt.bar_label(bars, fmt='%.2f') # Show numbers on top
+
+plt.show()
+  
