@@ -58,7 +58,7 @@ prediction = predict_1nn(X_train, y_train, X_new)
 print("Predicted label of the new data: ", prediction)
 print("Target name of the new data: ", iris['target_names'][prediction])
 
-
+#True Labels vs Predicted Labels Scatter Plot
 #create figure with 2 side-by-side plots
 fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 5))
 

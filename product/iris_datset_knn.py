@@ -62,7 +62,7 @@ species_accuracies = []
 names = iris['target_names']
 count = 0
 
-# Figure of Accuracy per species(flower type)
+# Bar Plot of Accuracy per Species(Flower Type)
 # loop 3 times (0 = Setosa, 1 = Versicolor, 2 = Virginica)
 for i in range(3):
   # filter the current_species, return boolean array (eg.[True, True, False,...])
