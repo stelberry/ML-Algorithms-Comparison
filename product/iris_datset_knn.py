@@ -4,7 +4,7 @@ from sklearn.model_selection import train_test_split
 import matplotlib.pyplot as plt
 
 #import the 1NN function from one_nn.py
-from one_NN import predict_1nn
+from kNN import predict_knn
 
 """
 The dataset consists of 3 types of Iris flowers. 
@@ -34,11 +34,10 @@ print("Testing data shape X_test:",X_test.shape)
 
 #empty list to store the predictions
 evaluation_arr = []
-
 #loop through every item in test set as
 #the 1NN function only predict one test point at a time  
 for test_point in X_test:
-  predict = predict_1nn(X_train, y_train, test_point)
+  predict = predict_knn(X_train, y_train, test_point, k=3 )
   evaluation_arr.append(predict)
   
 y_pred = np.array(evaluation_arr)
@@ -54,37 +53,6 @@ print("Error rate:", error_rate)
 
 #predict label with new data
 X_new = np.array([6.0, 4.1, 5.0, 1.2])
-prediction = predict_1nn(X_train, y_train, X_new)
+prediction = predict_knn(X_train, y_train, X_new, k= 5)
 print("Predicted label of the new data: ", prediction)
 print("Target name of the new data: ", iris['target_names'][prediction])
-
-
-#create figure with 2 side-by-side plots
-fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 5))
-
-#plot actual labels
-for i in range(3): #loop 3 times since there are 3 types of flowers (0 = Setosa, 1 = Versicolor, and 2 = Virginica).
-    is_current_flower = y_test == i #create a filter to find matching the current flower
-    #get sepal length(col 0), only for the current one(is_current_flower)
-    #get sepal width(col 1), only for the current one(is_current_flower)
-    ax1.scatter(X_test[is_current_flower, 0], X_test[is_current_flower, 1], 
-                label=iris['target_names'][i], alpha=0.7)
-                
-ax1.set_title("Actual Labels")
-ax1.set_xlabel(iris['feature_names'][0])
-ax1.set_ylabel(iris['feature_names'][1])
-ax1.legend()
-
-#plot predicted labels
-#use the same logic
-for i in range(3):
-    is_current_flower = y_pred == i
-    ax2.scatter(X_test[is_current_flower, 0], X_test[is_current_flower, 1], 
-                label=iris['target_names'][i], alpha=0.7)
-                
-ax2.set_title("Predicted Labels")
-ax2.set_xlabel(iris['feature_names'][0])
-ax2.set_ylabel(iris['feature_names'][1])
-ax2.legend()
-
-plt.show()
