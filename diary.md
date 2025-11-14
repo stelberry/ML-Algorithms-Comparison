@@ -1,3 +1,13 @@
+## Week 7 (14/11/2025)
+
+- Created a new issue to test and plot with datasets
+- Explore the **UCI repository** for potential datasets
+- However, as the **Iris dataset** was already implemented, I decided to finish it first before switching to a new dataset.
+- Visualised the **1NN algorithm** results using the Iris dataset
+  - Implemented a **side-by-side scatter plot** to compare **True Labels vs. Predicted Labels**
+- Tested the **kNN algorithm** on the Iris dataset
+- implemented a **bar plot** comparing the accuracy per species(Setosa, Versicolor, Virginica)
+
 ## Week 6 (07/11/2025)
 
 - Implemented a new tie-breaking strategy

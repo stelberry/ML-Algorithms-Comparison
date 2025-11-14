@@ -1,7 +1,7 @@
 import numpy as np
 from collections import Counter
 
-def predict_kNN(dataset, labels, test_point, k):
+def predict_knn(dataset, labels, test_point, k):
   """
   Compute the Euclidean distance between the test_point and each row in the dataset
   For example, datasets are [1,2] and [3,1] and test_point is [4,2].
@@ -13,7 +13,7 @@ def predict_kNN(dataset, labels, test_point, k):
   2nd: np.linalg.norm numpy function compute the norm length(squared each then sum all then sqrt that sum)
   """
   euclidean_distance = np.linalg.norm(dataset - test_point, axis = 1)
-  print("distances:", euclidean_distance)
+  print("distances:", euclidean_distance[:10])
   
   # get the indices that would sort the distances from smallest to largest
   sort_indicies = np.argsort(euclidean_distance)
@@ -51,7 +51,7 @@ def predict_kNN(dataset, labels, test_point, k):
   prediction = most_common[0][0]
   return prediction
   
-  
+"""
  #test data
 data = np.array([[1,2],[2,2],[4,3],[3,1],[5,2], [1,1],[2,3]])
 label = np.array(['A','B','A','C','B','A','C'])
@@ -60,3 +60,4 @@ test_point = [3,2]
 # run the prediction using k=5
 prediction = predict_kNN(data, label, test_point, k=5)
 print("Predicted label:", prediction)
+"""
