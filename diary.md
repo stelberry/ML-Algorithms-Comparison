@@ -1,3 +1,9 @@
+## Week 7 (15/11/2025)
+
+- Read Induction of Decision Trees by Quinlan, J.R
+- It introduced the **ID3 algorithm**, explaining the step-by-step process of building a Decision Tree
+- Learned the precise theory behind the **different impurity measures** and provides the theoretical background for handling practical data issues like noise and missing values
+
 ## Week 7 (14/11/2025)
 
 - Created a new issue to test and plot with datasets
