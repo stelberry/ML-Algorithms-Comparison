@@ -1,6 +1,14 @@
+## Week 8 (19/11/2025)
+
+- Read **Machine Learning in Action** by Harrington,P chapter 3: Splitting datasets one feature at a time: decision trees.
+- Finished section 3.1
+- It introduces the fundamental concepts behind constructing decision trees, focusing on how to calculate **Shannon Entropy** (messiness), how to split a dataset into more organized subsets, how to recursively build the tree in Python.
+- It also explains that the key to building an effective tree is identifying which feature provides the most **information gain**
+- Section 3.2 will be about plotting the trees with Matplotlib
+
 ## Week 7 (15/11/2025)
 
-- Read Induction of Decision Trees by Quinlan, J.R
+- Read **Induction of Decision Trees** by Quinlan, J.R
 - It introduced the **ID3 algorithm**, explaining the step-by-step process of building a Decision Tree
 - Learned the precise theory behind the **different impurity measures** and provides the theoretical background for handling practical data issues like noise and missing values
 
