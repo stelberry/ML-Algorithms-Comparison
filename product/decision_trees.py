@@ -19,13 +19,13 @@ class DecisionTreesCART:
         self.root = None
         
   def calc_entropy(self, labels):
-    class_names, class_counts = np.unique(labels, return_count = True)
+    class_names, class_counts = np.unique(labels, return_counts = True)
     probs = class_counts / class_counts.sum()
     entropy = -np.sum(probs * np.log2(probs))
     return entropy
   
   def calc_gini_impurity(self, labels):
-    class_names, class_counts = np.unique(labels, return_count = True)
+    class_names, class_counts = np.unique(labels, return_counts = True)
     probabilities = class_counts/class_counts.sum()
     gini_impurity = 1.0 - np.sum(probabilities ** 2)
     return gini_impurity
@@ -47,14 +47,21 @@ class DecisionTreesCART:
     """Loops through all features to find the split with the lowest Gini."""
     
     best_gini = 1.0
+    best_split = None
     
     for features_index in range(num_features):
       current_column_values = features[:, features_index]
       thresholds = np.unique(current_column_values)
       
       for threshold in thresholds:
-        left_mask = current_column_values <= threshold
-        right_mask = current_column_values > threshold
+      
+        if isinstance(threshold, str):
+          left_mask = current_column_values == threshold
+          right_mask = current_column_values != threshold
+
+        else:
+          left_mask = current_column_values <= threshold
+          right_mask = current_column_values > threshold
         
         if np.sum(left_mask) == 0 or np.sum(right_mask) == 0:
           continue
