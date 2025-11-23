@@ -43,7 +43,7 @@ class DecisionTreesCART:
   
     return weighted_gini
     
-  def best_split(self, features, labels, num_features):
+  def find_best_split(self, features, labels, num_features):
     """Loops through all features to find the split with the lowest Gini."""
     
     best_gini = 1.0

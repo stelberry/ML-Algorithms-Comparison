@@ -1,3 +1,20 @@
+## Week 8 (22-23/11/2025)
+
+- Implemented Gini Impurity as the measure of uniformity
+- Implemented Entropy as the other measure of uniformity
+- Successfully implemented the **find_best_split()** method
+  - Loops through every feature and every unique value to find potential **thresholds**
+  - Implemented **Boolean Maskink** to split data into "Left" and "Right" groups based on the condition `value <= threshold`
+  - Calculated **Weighted Gini** to compare splits and determine the lowest impurity
+- Adopted a full **Object-Oriented Design** to meet project requirements
+
+## Week 8 (20-21/11/2025)
+
+- Learned about **CART algorithm**, Classification and Regression Trees, which can handle classification and regression tasks
+- CART classification works by recursively splitting the data into two **binary groups**. At each step, it picks the best feature and threshold to split on, trying to make the resulting nodes as pure as possible
+- CART use **Gini Impurity** as the splitting criterion. the lower the gini, the more pure the subset is
+- Initially planned to use ID3 (from the textbooks), but realized it struggles with numerical attributes like the Iris dataset because it creates too many branches. So I switched to CART because its **Binary Split** approach handles the numerical attributes like Iris dataset and the categorical/string attributes like Animals dataset with the same logic. This saves me from writing two separate algorithms
+
 ## Week 8 (19/11/2025)
 
 - Read **Machine Learning in Action** by Harrington,P chapter 3: Splitting datasets one feature at a time: decision trees.
