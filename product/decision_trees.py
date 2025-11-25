@@ -1,7 +1,6 @@
 import numpy as np
 from collections import Counter
 
-
 class Node: 
   """A helper class to store tree info instead of using confusing strings."""
   def __init__(self, feature = None, threshold = None, left = None, right = None, value = None):
@@ -49,9 +48,10 @@ class DecisionTreesCART:
         """Create boolean masks for splitting data."""
         if isinstance(threshold, str):
             left_mask = column_values == threshold
+            right_mask = column_values != threshold
         else:
             left_mask = column_values <= threshold
-        right_mask = left_mask > threshold
+            right_mask = column_values > threshold
         return left_mask, right_mask
 
   def find_best_split(self, features, labels, n_features):
@@ -117,7 +117,7 @@ class DecisionTreesCART:
       depth + 1
       )
     
-    return Node(feature = best_split['features_index'],
+    return Node(feature = best_split['feature_index'],
                 threshold = best_split['threshold'],
                 left = left_child,
                 right = right_child
@@ -147,5 +147,6 @@ class DecisionTreesCART:
     
   def predict(self, features):
     """Make predictions for multiple samples."""
-    X = np.array[features]
+    X = np.array(features)
     return np.array([self._traverse_tree(x, self.root) for x in X]) 
+  
