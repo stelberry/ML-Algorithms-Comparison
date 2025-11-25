@@ -1,4 +1,5 @@
 import numpy as np
+from collections import Counter
 
 class Node: 
   """A helper class to store tree info instead of using confusing strings."""
@@ -43,41 +44,109 @@ class DecisionTreesCART:
   
     return weighted_gini
     
-  def find_best_split(self, features, labels, num_features):
+  def _create_split_masks(self, column_values, threshold):
+        """Create boolean masks for splitting data."""
+        if isinstance(threshold, str):
+            left_mask = column_values == threshold
+            right_mask = column_values != threshold
+        else:
+            left_mask = column_values <= threshold
+            right_mask = column_values > threshold
+        return left_mask, right_mask
+
+  def find_best_split(self, features, labels, n_features):
     """Loops through all features to find the split with the lowest Gini."""
     
     best_gini = 1.0
     best_split = None
     
-    for features_index in range(num_features):
-      current_column_values = features[:, features_index]
+    for feature_index in range(n_features):
+      current_column_values = features[:, feature_index]
       thresholds = np.unique(current_column_values)
       
       for threshold in thresholds:
-      
-        if isinstance(threshold, str):
-          left_mask = current_column_values == threshold
-          right_mask = current_column_values != threshold
-
-        else:
-          left_mask = current_column_values <= threshold
-          right_mask = current_column_values > threshold
+        left_mask, right_mask = self._create_split_masks(current_column_values, threshold)     
         
         if np.sum(left_mask) == 0 or np.sum(right_mask) == 0:
           continue
           
-        left_targets = labels[left_mask]
-        right_targets = labels[right_mask]
+        left_labels = labels[left_mask]
+        right_labels = labels[right_mask]
         
-        gini = self.calc_weighted_gini(left_targets, right_targets)
+        gini = self.calc_weighted_gini(left_labels, right_labels)
         
         if gini < best_gini:
           best_gini = gini
-          best_split = {'feature_index': features_index,
+          best_split = {'feature_index': feature_index,
                         'threshold': threshold,
+                        'left_features': features[left_mask],  
+                        'left_labels': left_labels,               
+                        'right_features': features[right_mask],
+                        'right_labels': right_labels
                         }
     return best_split
+       
+  def get_most_common_labels(self, labels):
+    most_common_labels = Counter(labels).most_common(1)[0][0]
+    return Node(value = most_common_labels)
+    
+  def create_tree(self,features, labels, depth=0):
+    n_samples, n_features = features.shape
+    n_unique_labels = len(np.unique(labels))
         
+    #Stopping criteria
+    if (depth >= self.max_depth or
+        n_samples < self.min_samples or
+        n_unique_labels == 1):
+        return self.get_most_common_labels(labels)
+      
+    best_split = self.find_best_split(features, labels, n_features)
+    
+    if best_split is None:
+      return self.get_most_common_labels(labels)
+    
+    left_child = self.create_tree(
+      best_split['left_features'], 
+      best_split['left_labels'], 
+      depth + 1
+      )
+      
+    right_child = self.create_tree(
+      best_split['right_features'], 
+      best_split['right_labels'], 
+      depth + 1
+      )
+    
+    return Node(feature = best_split['feature_index'],
+                threshold = best_split['threshold'],
+                left = left_child,
+                right = right_child
+                )
+      
+  def fit(self, features, labels):
+    self.root = self.create_tree(np.array(features), np.array(labels))
+      
+  def _traverse_tree(self, features, node):
+        """Recursively traverse tree to make prediction for a single sample."""
+        if node.is_leaf():
+            return node.value
         
-
-
+        feature_value = features[node.feature]
+        
+        # Handle categorical and numerical features
+        if isinstance(node.threshold, str):
+            if feature_value == node.threshold:
+                return self._traverse_tree(features, node.left)
+            else:
+                return self._traverse_tree(features, node.right)
+        else:
+            if feature_value <= node.threshold:
+                return self._traverse_tree(features, node.left)
+            else:
+                return self._traverse_tree(features, node.right)
+    
+  def predict(self, features):
+    """Make predictions for multiple samples."""
+    X = np.array(features)
+    return np.array([self._traverse_tree(x, self.root) for x in X]) 
+  
