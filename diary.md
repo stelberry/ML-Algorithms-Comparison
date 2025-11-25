@@ -1,10 +1,18 @@
+## Week 9 (24-25/11/2025)
+
+- Implemented the recursive **create_tree()** method for **Tree Construction**
+  - Uses **recursion** to build deeper nodes until a stopping condition is met (Max Depth or Purity).
+  - Integrated logic to handle both numerical (binary split) and categorical attributes within the same structure.
+- Implemented **predict()** and **traverse_tree()** to walk down the tree and classify new samples.
+- Successfully tested the algorithm on the **Iris benchmark dataset**, achieving high accuracy score, verifying that the binary splitting logic works correctly for continuous data.
+
 ## Week 8 (22-23/11/2025)
 
 - Implemented Gini Impurity as the measure of uniformity
 - Implemented Entropy as the other measure of uniformity
 - Successfully implemented the **find_best_split()** method
   - Loops through every feature and every unique value to find potential **thresholds**
-  - Implemented **Boolean Maskink** to split data into "Left" and "Right" groups based on the condition `value <= threshold`
+  - Implemented **Boolean Masking** to split data into "Left" and "Right" groups based on the condition `value <= threshold`
   - Calculated **Weighted Gini** to compare splits and determine the lowest impurity
 - Adopted a full **Object-Oriented Design** to meet project requirements
 
