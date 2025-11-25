@@ -1,4 +1,6 @@
 import numpy as np
+from collections import Counter
+
 
 class Node: 
   """A helper class to store tree info instead of using confusing strings."""
@@ -43,14 +45,14 @@ class DecisionTreesCART:
   
     return weighted_gini
     
-  def find_best_split(self, features, labels, num_features):
+  def find_best_split(self, features, labels, n_features):
     """Loops through all features to find the split with the lowest Gini."""
     
     best_gini = 1.0
     best_split = None
     
-    for features_index in range(num_features):
-      current_column_values = features[:, features_index]
+    for feature_index in range(n_features):
+      current_column_values = features[:, feature_index]
       thresholds = np.unique(current_column_values)
       
       for threshold in thresholds:
@@ -73,11 +75,40 @@ class DecisionTreesCART:
         
         if gini < best_gini:
           best_gini = gini
-          best_split = {'feature_index': features_index,
+          best_split = {'feature_index': feature_index,
                         'threshold': threshold,
+                        'left_features': features[left_mask],  
+                        'left_labels': left_targets,               
+                        'right_features': features[right_mask],
+                        'right_labels': right_targets
                         }
     return best_split
+       
+  def create_tree(self,features, labels, depth=0):
+    n_samples, n_features = features.shape
+    n_unique_labels = len(np.unique(labels))
         
-        
-
-
+    #Stopping criteria
+    if (depth >= self.max_depth) or (n_samples < self.min_samples) or (n_unique_labels == 1):
+      most_common_label = Counter(labels).most_common(1)[0][0]
+      return Node(value = most_common_label)
+      
+    best_split = self.find_best_split(features, labels, n_features)
+    
+    if best_split is None:
+      most_common_label = Counter(labels).most_common(1)[0][0]
+      return Node(value = most_common_label)
+    
+    left_child = self.create_tree(best_split['left_features'], best_split['left_labels'], depth + 1)
+    right_child = self.create_tree(best_split['right_features'], best_split['right_labels'], depth + 1)
+    
+    return Node(feature = best_split['features_index'],
+                threshold = best_split['threshold'],
+                left = left_child,
+                right = right_child
+                )
+      
+  def fit(self, features, labels):
+    self.root = self.create_tree(np.array(features), np.array(labels))
+      
+    
