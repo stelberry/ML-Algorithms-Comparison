@@ -51,7 +51,7 @@ class DecisionTreesCART:
             left_mask = column_values == threshold
         else:
             left_mask = column_values <= threshold
-        right_mask = ~left_mask
+        right_mask = left_mask > threshold
         return left_mask, right_mask
 
   def find_best_split(self, features, labels, n_features):
@@ -126,4 +126,26 @@ class DecisionTreesCART:
   def fit(self, features, labels):
     self.root = self.create_tree(np.array(features), np.array(labels))
       
+  def _traverse_tree(self, features, node):
+        """Recursively traverse tree to make prediction for a single sample."""
+        if node.is_leaf():
+            return node.value
+        
+        feature_value = features[node.feature]
+        
+        # Handle categorical and numerical features
+        if isinstance(node.threshold, str):
+            if feature_value == node.threshold:
+                return self._traverse_tree(features, node.left)
+            else:
+                return self._traverse_tree(features, node.right)
+        else:
+            if feature_value <= node.threshold:
+                return self._traverse_tree(features, node.left)
+            else:
+                return self._traverse_tree(features, node.right)
     
+  def predict(self, features):
+    """Make predictions for multiple samples."""
+    X = np.array[features]
+    return np.array([self._traverse_tree(x, self.root) for x in X]) 
