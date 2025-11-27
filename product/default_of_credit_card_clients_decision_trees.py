@@ -1,10 +1,10 @@
-import numpy as np
 import pandas as pd
-from sklearn.model_selection import train_test_split
-from kNN import predict_knn
 import os
+from sklearn.model_selection import train_test_split
+from decision_trees import DecisionTreesCART
+import numpy as np
 from sklearn.utils import resample
-from sklearn.preprocessing import MinMaxScaler
+
 
 """
 UCI Default of Credit Cart Clients Dataset
@@ -41,89 +41,71 @@ FEATURES (23 total):
 
 
 DATASET CHARACTERISTICS:
-- Imbalanced: ~22% default, ~78% no default
 - Mix of categorical (sex, education, marriage) and continuous features
 - Feature scales vary widely (age: 20-80, credit limit: 10,000-1,000,000)
 """
-
-def credit_card_knn():
+def run_credit_card_tree():
   filename = 'product/default_of_credit_card_clients.xls'
     
   print(f"Loading '{filename}'... (this might take a few seconds)")
-  
+    
   try:
     df = pd.read_excel(filename, header=1)
   except FileNotFoundError:
     print(f"\nERROR: Could not find '{filename}'.")
     print(f"Current folder: {os.getcwd()}")
     return
-  
-  print("Dataset shape:", df.shape)
-  print("\nFirst few rows:")
-  print(df.head())
-  print("\nColumn names:")
-  print(df.columns.tolist())
-  print("\nDataset info:")
-  print(df.info())
-  
+   
+  # 2. PREPROCESSING
   target_name = 'default payment next month'
-  
-    # drop 'ID' column as it is not a feature
-
-  if 'ID' in df.columns:
-        df = df.drop('ID', axis=1)
     
-  # separate features (X) and target (y)
+  if 'ID' in df.columns:
+    df = df.drop('ID', axis=1)
+        
   X = df.drop(target_name, axis=1).values
   y = df[target_name].values
+  
+  # training a custom Python decision tree on 30,000 rows is very slow.
+  # I sample 2,000 rows for development.
+  print("2,000 samples for speed...")
+  X, y = resample(X, y, n_samples=2000, random_state=2802, stratify=y)
 
-  print("\nOriginal Dataset Shape:", X.shape)
-  
-  """
-  # since 30,000 rows is too slow for a simple kNN loop, I sample 1,000 rows for testing.
-  X, y = resample(X, y, n_samples=1000, random_state=0, stratify=y)
-"""
-  # split data into training set (75%) and testing set (25%)
   X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=2802, stratify=y)
+  print(f"Training on {len(X_train)} samples...")
+  print(f"Testing on {len(X_test)} samples...\n")
   
-  """
-  transform all features to be in range [0, 1]
-  without scaling, features with larger values such as 
-  credit limit: 10,000-1,000,000 dominate the distance calculation
-  over small values like Age: 20-80
-  """
-  scaler = MinMaxScaler()
-  X_train = scaler.fit_transform(X_train) # learn the scaling from training data
-  X_test = scaler.transform(X_test) # apply same scaling to test data
+  criterions = ['gini', 'entropy']
   
-  print(f"\nTraining data shape: {X_train.shape}")
-  print(f"Testing data shape: {X_test.shape}")
-  
-  k_value = 5 
-  print(f"\nStarting k-NN predictions with k={k_value}...")
-  
-  # create empty list to store all predictions
-  evaluation_arr = []
-  print("Starting predictions (this might take a moment)...")
+  for criterion in criterions:
+    print("=" * 50)
+    print(f"TESTING WITH {criterion.upper()}")
+    print("=" * 50)
+    
+    my_tree = DecisionTreesCART(max_depth=5, min_samples=2, criterion=criterion)
+    
+    print("Building the tree (this may take a moment)...")
+    my_tree.fit(X_train, y_train)
+    
+    print("Making predictions....")
+    predictions = my_tree.predict(X_test)
+    
+    y_pred = np.array(predictions)
+    accuracy_score = np.mean(y_pred==y_test) 
+    total_guesses = len(y_test)
+    correct_guesses = np.sum(y_pred == y_test)
+    
+    print("-" * 30)
+    print(f"FINAL ACCURACY: {accuracy_score * 100:.2f}%")
+    print(f"Correct: {correct_guesses}/{total_guesses}")
+    print("-" * 30)
+    
+    print("\nSample Predictions:")
+    labels = ['No Default', 'Default']
+    for i in range(10):
+      actual = labels[y_test[i]]
+      predicted = labels[predictions[i]]
+      print(f"Actual: {actual}, Predicted: {predicted}")
   print()
   
-  for test_point in X_test:
-    predict = predict_knn(X_train, y_train, test_point, k_value)
-    evaluation_arr.append(predict)
-    
-  y_pred = np.array(evaluation_arr)
-  
-  accuracy_score = np.mean(y_pred == y_test)
-  error_rate = 1 - accuracy_score
-  
-  print("\n---------------- RESULTS ----------------")
-  print("k value:", k_value)
-  print("Predicted labels (first 10): ", y_pred[:10])
-  print("Actual labels (first 10):    ", y_test[:10])
-  print("Accuracy score:", accuracy_score)
-  print("Error rate:",error_rate)
-
-
-
 if __name__ == "__main__":
-  credit_card_knn()
+  run_credit_card_tree()
