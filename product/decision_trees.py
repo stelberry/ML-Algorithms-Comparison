@@ -14,14 +14,16 @@ class Node:
     return self.value is not None
     
 class DecisionTreesCART:
-  def __init__(self, max_depth=10, min_samples=2):
+  def __init__(self, max_depth=10, min_samples=2, criterion = 'gini'):
         self.max_depth = max_depth
         self.min_samples = min_samples
         self.root = None
+        self.criterion = criterion
         
   def calc_entropy(self, labels):
     class_names, class_counts = np.unique(labels, return_counts = True)
     probs = class_counts / class_counts.sum()
+    probs = probs[probs > 0] # only take logs of probabilities > 0
     entropy = -np.sum(probs * np.log2(probs))
     return entropy
   
@@ -43,6 +45,19 @@ class DecisionTreesCART:
     weighted_gini = (left_weight * gini_left) + (right_weight * gini_right)
   
     return weighted_gini
+   
+  def calc_weighted_entropy(self, left_labels, right_labels):
+    total = len(left_labels) + len(right_labels)
+    
+    entropy_left = self.calc_entropy(left_labels)
+    entropy_right = self.calc_entropy(right_labels)
+    
+    left_weight = len(left_labels)/total
+    right_weight = len(right_labels)/total
+    
+    weighted_entropy = (left_weight * entropy_left) + (right_weight * entropy_right)
+    
+    return weighted_entropy
     
   def _create_split_masks(self, column_values, threshold):
         """Create boolean masks for splitting data."""
@@ -55,9 +70,9 @@ class DecisionTreesCART:
         return left_mask, right_mask
 
   def find_best_split(self, features, labels, n_features):
-    """Loops through all features to find the split with the lowest Gini."""
+    """Loops through all features to find the split with the lowest impurity."""
     
-    best_gini = 1.0
+    best_impurity = float('inf') #start with inifinity
     best_split = None
     
     for feature_index in range(n_features):
@@ -73,10 +88,14 @@ class DecisionTreesCART:
         left_labels = labels[left_mask]
         right_labels = labels[right_mask]
         
-        gini = self.calc_weighted_gini(left_labels, right_labels)
+        # calculate impurity based on criterion
+        if self.criterion == 'gini':
+          impurity = self.calc_weighted_gini(left_labels, right_labels)
+        else:  # entropy
+          impurity = self.calc_weighted_entropy(left_labels, right_labels)
         
-        if gini < best_gini:
-          best_gini = gini
+        if impurity < best_impurity:
+          best_impurity = impurity
           best_split = {'feature_index': feature_index,
                         'threshold': threshold,
                         'left_features': features[left_mask],  
