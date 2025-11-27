@@ -1,10 +1,11 @@
 import numpy as np
 import pandas as pd
 from sklearn.model_selection import train_test_split
-from sklearn.utils import resample
-from one_NN import predict_1nn
+from kNN import predict_knn
 import os
+from sklearn.utils import resample
 from sklearn.preprocessing import MinMaxScaler
+
 """
 UCI Default of Credit Cart Clients Dataset
 ================================
@@ -44,11 +45,12 @@ DATASET CHARACTERISTICS:
 - Mix of categorical (sex, education, marriage) and continuous features
 - Feature scales vary widely (age: 20-80, credit limit: 10,000-1,000,000)
 """
-def credit_card_1nn():
+
+def credit_card_knn():
   filename = 'product/default_of_credit_card_clients.xls'
     
   print(f"Loading '{filename}'... (this might take a few seconds)")
-    
+  
   try:
     df = pd.read_excel(filename, header=1)
   except FileNotFoundError:
@@ -66,27 +68,23 @@ def credit_card_1nn():
   
   target_name = 'default payment next month'
   
-  # drop 'ID' column as it is not a feature
+    # drop 'ID' column as it is not a feature
+
   if 'ID' in df.columns:
-    df = df.drop('ID', axis = 1)
-  
+        df = df.drop('ID', axis=1)
+    
   # separate features (X) and target (y)
-  X = df.drop(target_name, axis =1).values
+  X = df.drop(target_name, axis=1).values
   y = df[target_name].values
+
+  print("\nOriginal Dataset Shape:", X.shape)
   
-  feature_names = df.drop(target_name, axis=1).columns
-  
-  print("Original Dataset Shape:", X.shape)
-  
-  
-  # uncomment this section to use only 1,000 samples for faster testing
+  """
   # since 30,000 rows is too slow for a simple 1NN loop, I sample 1,000 rows for testing.
-  # stratify=y to keep the same % of default/non-default.
-  """X, y = resample(X, y, n_samples=1000, random_state=0, stratify=y)
-  print("Speeded Sampled Shape:", X.shape)"""
-  
+  X, y = resample(X, y, n_samples=1000, random_state=0, stratify=y)
+"""
   # split data into training set (75%) and testing set (25%)
-  X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=0, stratify=y)
+  X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=2802, stratify=y)
   
   """
   transform all features to be in range [0, 1]
@@ -97,18 +95,20 @@ def credit_card_1nn():
   scaler = MinMaxScaler()
   X_train = scaler.fit_transform(X_train) # learn the scaling from training data
   X_test = scaler.transform(X_test) # apply same scaling to test data
-
   
   print(f"\nTraining data shape: {X_train.shape}")
   print(f"Testing data shape: {X_test.shape}")
-      
+  
+  k_value = 5 
+  print(f"\nStarting k-NN predictions with k={k_value}...")
+  
   # create empty list to store all predictions
   evaluation_arr = []
   print("Starting predictions (this might take a moment)...")
   print()
   
   for test_point in X_test:
-    predict = predict_1nn(X_train, y_train, test_point)
+    predict = predict_knn(X_train, y_train, test_point, k_value)
     evaluation_arr.append(predict)
     
   y_pred = np.array(evaluation_arr)
@@ -116,13 +116,14 @@ def credit_card_1nn():
   accuracy_score = np.mean(y_pred == y_test)
   error_rate = 1 - accuracy_score
   
+  print("\n---------------- RESULTS ----------------")
+  print("k value:", k_value)
   print("Predicted labels (first 10): ", y_pred[:10])
   print("Actual labels (first 10):    ", y_test[:10])
   print("Accuracy score:", accuracy_score)
   print("Error rate:",error_rate)
-  
-  
-  
+
+
+
 if __name__ == "__main__":
-  credit_card_1nn()
-  
+  credit_card_knn()
