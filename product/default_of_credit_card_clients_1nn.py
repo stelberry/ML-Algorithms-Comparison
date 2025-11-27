@@ -40,7 +40,6 @@ FEATURES (23 total):
 
 
 DATASET CHARACTERISTICS:
-- Imbalanced: ~22% default, ~78% no default
 - Mix of categorical (sex, education, marriage) and continuous features
 - Feature scales vary widely (age: 20-80, credit limit: 10,000-1,000,000)
 """
@@ -83,7 +82,7 @@ def credit_card_1nn():
   # since 30,000 rows is too slow for a simple 1NN loop, I sample 1,000 rows for testing.
   # stratify=y to keep the same % of default/non-default.
   """X, y = resample(X, y, n_samples=1000, random_state=0, stratify=y)
-  print("Speeded Sampled Shape:", X.shape)"""
+  print("Speeded Sampled 1000 Shape:", X.shape)"""
   
   # split data into training set (75%) and testing set (25%)
   X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=0, stratify=y)
