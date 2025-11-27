@@ -13,17 +13,17 @@ def predict_knn(dataset, labels, test_point, k):
   2nd: np.linalg.norm numpy function compute the norm length(squared each then sum all then sqrt that sum)
   """
   euclidean_distance = np.linalg.norm(dataset - test_point, axis = 1)
-  print("distances:", euclidean_distance[:10])
+  #print("distances:", euclidean_distance[:10])
   
   # get the indices that would sort the distances from smallest to largest
   sort_indicies = np.argsort(euclidean_distance)
   k_indicies = sort_indicies[:k]
-  print("k indicies:", k_indicies)
+  #print("k indicies:", k_indicies)
   
   # get the actual labels (e.g. 'A', 'B') for the k-closest neighbors
   # this list is automatically sorted by distance (closest first)
   k_nearest_labels = labels[k_indicies]
-  print("k nearest labels:", k_nearest_labels)
+  #print("k nearest labels:", k_nearest_labels)
   
   """# randomly selecting label
   #this just picks one random neighbor from the k-list. It doesn't vote.

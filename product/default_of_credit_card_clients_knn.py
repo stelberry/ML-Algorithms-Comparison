@@ -3,6 +3,8 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 from kNN import predict_knn
 import os
+from sklearn.utils import resample
+from sklearn.preprocessing import MinMaxScaler
 
 """
 UCI Default of Credit Cart Clients Dataset
@@ -75,10 +77,53 @@ def credit_card_knn():
   X = df.drop(target_name, axis=1).values
   y = df[target_name].values
 
-  print("Original Dataset Shape:", X.shape)
+  print("\nOriginal Dataset Shape:", X.shape)
   
+  """
+  # since 30,000 rows is too slow for a simple 1NN loop, I sample 1,000 rows for testing.
+  X, y = resample(X, y, n_samples=1000, random_state=0, stratify=y)
+"""
   # split data into training set (75%) and testing set (25%)
-  X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=0, stratify=y)
+  X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=2802, stratify=y)
+  
+  """
+  transform all features to be in range [0, 1]
+  without scaling, features with larger values such as 
+  credit limit: 10,000-1,000,000 dominate the distance calculation
+  over small values like Age: 20-80
+  """
+  scaler = MinMaxScaler()
+  X_train = scaler.fit_transform(X_train) # learn the scaling from training data
+  X_test = scaler.transform(X_test) # apply same scaling to test data
+  
+  print(f"\nTraining data shape: {X_train.shape}")
+  print(f"Testing data shape: {X_test.shape}")
+  
+  k_value = 5 
+  print(f"\nStarting k-NN predictions with k={k_value}...")
+  
+  # create empty list to store all predictions
+  evaluation_arr = []
+  print("Starting predictions (this might take a moment)...")
+  print()
+  
+  for test_point in X_test:
+    predict = predict_knn(X_train, y_train, test_point, k_value)
+    evaluation_arr.append(predict)
+    
+  y_pred = np.array(evaluation_arr)
+  
+  accuracy_score = np.mean(y_pred == y_test)
+  error_rate = 1 - accuracy_score
+  
+  print("\n---------------- RESULTS ----------------")
+  print("k value:", k_value)
+  print("Predicted labels (first 10): ", y_pred[:10])
+  print("Actual labels (first 10):    ", y_test[:10])
+  print("Accuracy score:", accuracy_score)
+  print("Error rate:",error_rate)
+
+
 
 if __name__ == "__main__":
   credit_card_knn()

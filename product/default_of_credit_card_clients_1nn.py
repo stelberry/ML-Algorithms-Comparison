@@ -75,7 +75,7 @@ def credit_card_1nn():
   
   feature_names = df.drop(target_name, axis=1).columns
   
-  print("Original Dataset Shape:", X.shape)
+  print("\nOriginal Dataset Shape:", X.shape)
   
   
   # uncomment this section to use only 1,000 samples for faster testing
@@ -103,7 +103,7 @@ def credit_card_1nn():
       
   # create empty list to store all predictions
   evaluation_arr = []
-  print("Starting predictions (this might take a moment)...")
+  print("\nStarting predictions (this might take a moment)...")
   print()
   
   for test_point in X_test:
@@ -115,6 +115,7 @@ def credit_card_1nn():
   accuracy_score = np.mean(y_pred == y_test)
   error_rate = 1 - accuracy_score
   
+  print("\n---------------- RESULTS ----------------")
   print("Predicted labels (first 10): ", y_pred[:10])
   print("Actual labels (first 10):    ", y_test[:10])
   print("Accuracy score:", accuracy_score)
