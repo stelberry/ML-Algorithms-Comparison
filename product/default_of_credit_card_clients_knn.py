@@ -80,7 +80,7 @@ def credit_card_knn():
   print("\nOriginal Dataset Shape:", X.shape)
   
   """
-  # since 30,000 rows is too slow for a simple 1NN loop, I sample 1,000 rows for testing.
+  # since 30,000 rows is too slow for a simple kNN loop, I sample 1,000 rows for testing.
   X, y = resample(X, y, n_samples=1000, random_state=0, stratify=y)
 """
   # split data into training set (75%) and testing set (25%)
