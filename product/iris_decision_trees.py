@@ -13,7 +13,7 @@ y (target): species name in int
 2 = Virginica
 """
 
-def run_iris_test():
+def run_iris_tree():
 
   print("Loading Iris Dataset...")
   iris = load_iris()
