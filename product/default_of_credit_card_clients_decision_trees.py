@@ -31,7 +31,7 @@ FEATURES (23 total):
 2. Payment History (6 features): PAY_0 to PAY_6
    - Repayment status from April to September 2005
    - Values indicate months of payment delay
-   - -1 = pay duly, 0 = no delay, 1 = one month delay, 2 = two months delay, etc.
+   - -1,-2,0 = pay on time, 1 = one month delay, 2 = two months delay, etc.
 
 3. Bill Amounts (6 features): BILL_AMT1 to BILL_AMT6
    - Amount of bill statement from April to September 2005 (NT dollars)
@@ -65,10 +65,10 @@ def run_credit_card_tree():
   X = df.drop(target_name, axis=1).values
   y = df[target_name].values
   
-  # training a custom Python decision tree on 30,000 rows is very slow.
+  """# training a custom Python decision tree on 30,000 rows is very slow.
   # I sample 2,000 rows for development.
   print("2,000 samples for speed...")
-  X, y = resample(X, y, n_samples=2000, random_state=2802, stratify=y)
+  X, y = resample(X, y, n_samples=2000, random_state=2802, stratify=y)"""
 
   X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=2802, stratify=y)
   print(f"Training on {len(X_train)} samples...")

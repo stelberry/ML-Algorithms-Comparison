@@ -30,7 +30,7 @@ FEATURES (23 total):
 2. Payment History (6 features): PAY_0 to PAY_6
    - Repayment status from April to September 2005
    - Values indicate months of payment delay
-   - -1 = pay duly, 0 = no delay, 1 = one month delay, 2 = two months delay, etc.
+   - -2,-1,0 = pay on time, 1 = one month delay, 2 = two months delay, etc.
 
 3. Bill Amounts (6 features): BILL_AMT1 to BILL_AMT6
    - Amount of bill statement from April to September 2005 (NT dollars)

@@ -1,3 +1,11 @@
+## Week 9 (27/11/2025)
+
+- Selected the **Default of Credit Card Clients** dataset from the UCI Machine Learning Repository (30,000 samples, 23 features).
+- I chose this dataset because it represents a imbalanced binary classification problem (22% Default vs 78% Non-Default), which poses a significant challenge for standard algorithms compared to simple datasets.
+- I identified that the features had different scales (e.g, Credit Limit: 500,000 vs. Age: 30). Therefore, I implemented **Min-Max Normalization** to scale all features between 0-1, ensuring that the k-NN distance calculation would not be biased toward high-value features.
+- Successfully tested the dataset on 1NN, kNN, and Decision Tree algorithms.
+- Achieved accuracy ranging from 76-82%.
+
 ## Week 9 (24-25/11/2025)
 
 - Implemented the recursive **create_tree()** method for **Tree Construction**
