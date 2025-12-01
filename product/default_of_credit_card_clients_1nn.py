@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.utils import resample
-from one_NN import predict_1nn
+from one_nn import predict_1nn
 import os
 from sklearn.preprocessing import MinMaxScaler
 """

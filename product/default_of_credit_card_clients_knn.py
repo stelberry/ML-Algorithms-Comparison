@@ -80,9 +80,9 @@ def credit_card_knn():
   print("\nOriginal Dataset Shape:", X.shape)
   
   """
-  # since 30,000 rows is too slow for a simple kNN loop, I sample 1,000 rows for testing.
-  X, y = resample(X, y, n_samples=1000, random_state=0, stratify=y)
-"""
+  # since 30,000 rows is too slow for a simple kNN loop, I sample 5,000 rows for testing.
+  X, y = resample(X, y, n_samples=5000, random_state=0, stratify=y)
+  """
   # split data into training set (75%) and testing set (25%)
   X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=2802, stratify=y)
   
@@ -99,28 +99,36 @@ def credit_card_knn():
   print(f"\nTraining data shape: {X_train.shape}")
   print(f"Testing data shape: {X_test.shape}")
   
-  k_value = 5 
-  print(f"\nStarting k-NN predictions with k={k_value}...")
+  #Grid Search/Fine Tuning (find the best k which output the least error rate)
+  k_values = [3,5,7,9,11,13,15,17,19,21,23] 
+  best_k = 0
+  best_accuracy = 0
   
-  # create empty list to store all predictions
-  evaluation_arr = []
-  print("Starting predictions (this might take a moment)...")
-  print()
+  print("\nStarting Grid Search for optimal k...")
   
-  for test_point in X_test:
-    predict = predict_knn(X_train, y_train, test_point, k_value)
-    evaluation_arr.append(predict)
+  for k in k_values:
+    # create empty list to store all predictions
+    evaluation_arr = []
+    print(f"\nStarting predicting with k={k} (this might take a moment)...")
+    print()
+    for test_point in X_test:
+      predict = predict_knn(X_train, y_train, test_point, k)
+      evaluation_arr.append(predict)
+      
+    y_pred = np.array(evaluation_arr)
     
-  y_pred = np.array(evaluation_arr)
-  
-  accuracy_score = np.mean(y_pred == y_test)
-  error_rate = 1 - accuracy_score
-  
+    accuracy = np.mean(y_pred == y_test)
+    error_rate = 1 - accuracy
+    
+    if accuracy > best_accuracy:
+        best_accuracy = accuracy
+        best_k = k
+    
   print("\n---------------- RESULTS ----------------")
-  print("k value:", k_value)
+  print(f"The best k from {k_values}:", best_k)
   print("Predicted labels (first 10): ", y_pred[:10])
   print("Actual labels (first 10):    ", y_test[:10])
-  print("Accuracy score:", accuracy_score)
+  print("Accuracy score:", accuracy)
   print("Error rate:",error_rate)
 
 

@@ -55,8 +55,8 @@ def run_credit_card_tree():
     print(f"\nERROR: Could not find '{filename}'.")
     print(f"Current folder: {os.getcwd()}")
     return
-   
-  # 2. PREPROCESSING
+    
+  #Preprocessing
   target_name = 'default payment next month'
     
   if 'ID' in df.columns:
