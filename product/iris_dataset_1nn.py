@@ -4,7 +4,7 @@ from sklearn.model_selection import train_test_split
 import matplotlib.pyplot as plt
 
 #import the 1NN function from one_NN.py
-from one_NN import predict_1nn
+from one_nn import predict_1nn
 
 """
 The dataset consists of 3 types of Iris flowers. 

@@ -1,3 +1,11 @@
+## Week 10 (1-2/12/2025)
+
+- Addressed the limitation of using a hardcoded value **(k=5)** in the k-NN algorithm.
+- I implemented a search strategy to determine the optimal number of neighbors instead of using an most likely sweet spot.
+- Efficiency Strategy: Since running the custom algorithm on the full dataset (30,000 samples) is slow, I implemented `resample` for the tuning phase. I reduced the data to a `3,000-sample` subset, using `stratify` to maintain the correct class balance **(22% default rate)**.
+- Implementation: Created a manual `Grid Search` loop to test a list of k integers from `2 to 50`. The system iterates through each value, calculates accuracy, and stores the `best_k`.
+- Final Output: Updated the main prediction loop to apply the found `best_k` to the `full X_test` set. This ensures the final results are based on optimized parameters.
+
 ## Week 9 (27/11/2025)
 
 - Selected the **Default of Credit Card Clients** dataset from the UCI Machine Learning Repository (30,000 samples, 23 features).
@@ -90,11 +98,10 @@
 
 ## Week 3 (14/10/2025)
 
-- Finished reading chapter 1,2,3 of **Introduction to machine learning with Python** by Müller, A.C. and Guido, S.
+- Finished reading chapter 1,2 of **Introduction to machine learning with Python** by Müller, A.C. and Guido, S.
 - Chapter 1 explains the basic concept of machine learning.
 - Chapter 2 explains the difference between supervised and unsupervised learning, classification and regression algorithms like k-Nearest Neighbors, Linear Models, Support Vector Machines(SVM), and Decision Trees.
-- Chapter 3 explains algorithms such as k-Means clustering and Principal Component Analysis(PCA) for data visualisation and dimensionality reduction, and covers data preprocessing techniques.
-- Learned the foundations of ML and how algorithms are categorized, how to implement and evaluate basic models in scikit-learn, and the importance of data preparation and model evaluation for accurate ML results.
+- Learned the foundations of ML and how algorithms are categorized, how to implement and evaluate basic models in scikit-learn
 
 ## Week 2 (9/10/2025)
 

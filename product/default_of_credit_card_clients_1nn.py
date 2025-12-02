@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.utils import resample
-from one_NN import predict_1nn
+from one_nn import predict_1nn
 import os
 from sklearn.preprocessing import MinMaxScaler
 """
@@ -40,6 +40,7 @@ FEATURES (23 total):
 
 
 DATASET CHARACTERISTICS:
+- Imbalanced Data (22% Default vs 78% Pay)
 - Mix of categorical (sex, education, marriage) and continuous features
 - Feature scales vary widely (age: 20-80, credit limit: 10,000-1,000,000)
 """

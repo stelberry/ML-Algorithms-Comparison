@@ -38,22 +38,22 @@ def predict_knn(dataset, labels, test_point, k):
   prediction = unique_labels[max_count_index]
   return prediction"""
   
-  
+  # choose by distance
   # this counts votes. In a tie, it picks the neighbor that was closest.
   # 1. Counter() counts votes (e.g., {'C': 2, 'A': 2, 'B': 1})
   #    it remembers the order it saw them (C was closer than A).
   
-  # 2. .most_common(1) finds the winner. In a tie, it picks the one it saw first.
+  # 2. .most_common(1) picks the one it saw first.
   #    this automatically breaks the tie by distance.
   most_common = Counter(k_nearest_labels).most_common(1)
   
   # get the winning label (e.g., 'C') from the list [('C', 2)]
-  prediction = most_common[0][0]
+  prediction = most_common[0][0] 
   return prediction
   
 """
  #test data
-data = np.array([[1,2],[2,2],[4,3],[3,1],[5,2], [1,1],[2,3]])
+data = np.array([[1,2],[2,2],[4,3],[3,1],[5,2],[1,1],[2,3]])
 label = np.array(['A','B','A','C','B','A','C'])
 test_point = [3,2]
 

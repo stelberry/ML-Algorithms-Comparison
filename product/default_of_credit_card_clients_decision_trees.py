@@ -41,6 +41,7 @@ FEATURES (23 total):
 
 
 DATASET CHARACTERISTICS:
+- Imbalanced Data (22% Default vs 78% Pay)
 - Mix of categorical (sex, education, marriage) and continuous features
 - Feature scales vary widely (age: 20-80, credit limit: 10,000-1,000,000)
 """
@@ -55,8 +56,8 @@ def run_credit_card_tree():
     print(f"\nERROR: Could not find '{filename}'.")
     print(f"Current folder: {os.getcwd()}")
     return
-   
-  # 2. PREPROCESSING
+    
+  #Preprocessing
   target_name = 'default payment next month'
     
   if 'ID' in df.columns:

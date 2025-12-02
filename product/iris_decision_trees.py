@@ -60,4 +60,4 @@ def run_iris_tree():
   print()
   
 if __name__ == "__main__":
-      run_iris_test()
+  run_iris_tree()
