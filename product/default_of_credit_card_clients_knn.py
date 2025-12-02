@@ -111,7 +111,9 @@ def credit_card_knn():
   print(f"Resampled Testing data shape: {X_tune_test.shape}")
   print()
 
-  k_values = list(range(2, 51))  #k values from 2 to 50
+  # k values from 2 to 50
+  # for manual grid search loop
+  k_values = list(range(2, 51)) 
   best_k = 3
   best_accuracy = 0
     

@@ -40,6 +40,7 @@ FEATURES (23 total):
 
 
 DATASET CHARACTERISTICS:
+- Imbalanced Data (22% Default vs 78% Pay)
 - Mix of categorical (sex, education, marriage) and continuous features
 - Feature scales vary widely (age: 20-80, credit limit: 10,000-1,000,000)
 """
