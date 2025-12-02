@@ -79,10 +79,6 @@ def credit_card_knn():
 
   print("\nOriginal Dataset Shape:", X.shape)
   
-  """
-  # since 30,000 rows is too slow for a simple kNN loop, I sample 5,000 rows for testing.
-  X, y = resample(X, y, n_samples=5000, random_state=0, stratify=y)
-  """
   # split data into training set (75%) and testing set (25%)
   X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=2802, stratify=y)
   
@@ -96,39 +92,72 @@ def credit_card_knn():
   X_train = scaler.fit_transform(X_train) # learn the scaling from training data
   X_test = scaler.transform(X_test) # apply same scaling to test data
   
-  print(f"\nTraining data shape: {X_train.shape}")
-  print(f"Testing data shape: {X_test.shape}")
+  print(f"\nOriginal Training data shape: {X_train.shape}")
+  print(f"Original Testing data shape: {X_test.shape}")
   
-  #Grid Search/Fine Tuning (find the best k which output the least error rate)
-  k_values = [3,5,7,9,11,13,15,17,19,21,23] 
-  best_k = 0
+  """
+  =====================================
+  Hyperparameter Tuning (find the best k which output the least error rate)
+  ====================================
+  """
+  print("\n--- Starting Hyperparameter Tuning ---")
+  
+  # since 30,000 rows is too slow for a simple kNN loop, I sample 3,000 rows for testing.
+  X_tune, y_tune = resample(X_train, y_train, n_samples=3000, random_state=2802, stratify=y_train)
+  
+  X_tune_train, X_tune_test, y_tune_train, y_tune_test = train_test_split(X_tune, y_tune, test_size=0.25, random_state=2802, stratify=y_tune)
+  
+  print(f"\nResampled Training data shape: {X_tune_train.shape}")
+  print(f"Resampled Testing data shape: {X_tune_test.shape}")
+  print()
+
+  k_values = list(range(2, 51))  #k values from 2 to 50
+  best_k = 3
   best_accuracy = 0
-  
-  print("\nStarting Grid Search for optimal k...")
-  
+    
   for k in k_values:
-    # create empty list to store all predictions
-    evaluation_arr = []
-    print(f"\nStarting predicting with k={k} (this might take a moment)...")
-    print()
-    for test_point in X_test:
-      predict = predict_knn(X_train, y_train, test_point, k)
-      evaluation_arr.append(predict)
-      
-    y_pred = np.array(evaluation_arr)
+  
+    # Run prediction on the small validation set
+    temp_preds = []
+    for point in X_tune_test:
+      pred = predict_knn(X_tune_train, y_tune_train, point, k)
+      temp_preds.append(pred)
+  
+    y_pred_small = np.array(temp_preds)
     
-    accuracy = np.mean(y_pred == y_test)
-    error_rate = 1 - accuracy
-    
+    accuracy = np.mean(temp_preds == y_tune_test) 
+    print(f"Tested k={k}: Accuracy = {accuracy}")
+
     if accuracy > best_accuracy:
         best_accuracy = accuracy
         best_k = k
     
+  print(f"\n>>>>Tuning COMPLETE. Best k found: {best_k} (Accuracy: {best_accuracy})")
+  
+  """
+  =================================================================
+  Final Evaluation
+  Use the best_k to run on the full X_test set
+  =================================================================
+  """
+  # create empty list to store all predictions
+  evaluation_arr = []
+  print(f"\nRunning Final Model on Full Test Set (k={best_k})...")  
+  print("This will take a moment as we are processing 7,500 test points...")
+  
+  for test_point in X_test:
+      predict = predict_knn(X_train, y_train, test_point, best_k)
+      evaluation_arr.append(predict)
+      
+  y_pred = np.array(evaluation_arr) 
+  accuracy_score = np.mean(y_pred == y_test)
+  error_rate = 1 - accuracy_score
+    
   print("\n---------------- RESULTS ----------------")
-  print(f"The best k from {k_values}:", best_k)
+  print(f"The best k:", best_k)
   print("Predicted labels (first 10): ", y_pred[:10])
   print("Actual labels (first 10):    ", y_test[:10])
-  print("Accuracy score:", accuracy)
+  print("Accuracy score:", accuracy_score)
   print("Error rate:",error_rate)
 
 
