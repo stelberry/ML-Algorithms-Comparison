@@ -85,6 +85,27 @@ def credit_card_1nn():
   """X, y = resample(X, y, n_samples=1000, random_state=0, stratify=y)
   print("Speeded Sampled 1000 Shape:", X.shape)"""
   
+  
+  """==========================================================
+  # NEW: Class Imbalance Check
+  # This calculates and prints the exact % of Default vs Non-Default
+  # =========================================================="""
+  unique, counts = np.unique(y, return_counts=True)
+  total_samples = len(y)
+
+  print("\n--- Class Imbalance Analysis ---")
+  
+  for i in range(len(unique)):
+      cls_label = unique[i]    # [0,1]
+      count = counts[i]        # [23364,6636]
+      percent = (count / total_samples) * 100
+      
+      if cls_label == 1:
+          print(f"Default (1):     {count} samples ({percent}%)")
+      else:
+          print(f"Non-Default (0): {count} samples ({percent}%)")
+          
+          
   # split data into training set (75%) and testing set (25%)
   X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=0, stratify=y)
   

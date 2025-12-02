@@ -95,6 +95,27 @@ def credit_card_knn():
   print(f"\nOriginal Training data shape: {X_train.shape}")
   print(f"Original Testing data shape: {X_test.shape}")
   
+  
+  """==========================================================
+  # NEW: Class Imbalance Check
+  # This calculates and prints the exact % of Default vs Non-Default
+  # =========================================================="""
+  unique, counts = np.unique(y, return_counts=True)
+  total_samples = len(y)
+
+  print("\n--- Class Imbalance Analysis ---")
+  
+  for i in range(len(unique)):
+      cls_label = unique[i]    # [0,1]
+      count = counts[i]        # [23364,6636]
+      percent = (count / total_samples) * 100
+      
+      if cls_label == 1:
+          print(f"Default (1):     {count} samples ({percent}%)")
+      else:
+          print(f"Non-Default (0): {count} samples ({percent}%)")
+          
+          
   """
   =====================================
   Hyperparameter Tuning (find the best k which output the least error rate)
