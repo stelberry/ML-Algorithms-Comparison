@@ -70,6 +70,46 @@ def credit_card_1nn():
   
   target_name = 'default payment next month'
   
+  
+  """
+  ==========================================================
+  Renaming Column
+  The dataset has 'PAY_0' but then skips to 'PAY_2'.
+  Rename 'PAY_0' -> 'PAY_1' to be consistent.
+  ==========================================================
+  """
+  print("\nColumns before rename:")
+  print(df.columns.tolist())
+  df.columns = df.columns.str.strip()
+  
+  print("\n--- Renaming Column ---")
+  df.rename(columns={'PAY_0': 'PAY_1'}, inplace=True)
+  print("\nColumns after rename:")
+  print(df.columns.tolist())
+  print("\n===========================================")
+
+
+  """
+  ==========================================================
+  Data Cleaning (Handling Undocumented Labels)
+  Education: 0, 5, 6 are unlabelled. Group them into 4 (Others)
+  Marriage: 0 is unlabelled. Group it into 3 (Others)
+  ==========================================================
+  """
+  print("\n--- Cleaning Undocumented Labels ---")
+  
+  # check counts before cleaning
+  print("Education values before:", np.sort(df['EDUCATION'].unique()))
+  print("Marriage values before:", np.sort(df['MARRIAGE'].unique()))
+  
+  df['EDUCATION'] = df['EDUCATION'].replace({0: 4, 5: 4, 6: 4})
+  df['MARRIAGE'] = df['MARRIAGE'].replace({0: 3})
+  
+  print("\nEducation values after:", np.sort(df['EDUCATION'].unique()))
+  print("Marriage values after:", np.sort(df['MARRIAGE'].unique()))
+  print('\n========================================')
+  
+  
   # drop 'ID' column as it is not a feature
   if 'ID' in df.columns:
     df = df.drop('ID', axis = 1)
@@ -90,10 +130,12 @@ def credit_card_1nn():
   print("Speeded Sampled 1000 Shape:", X.shape)"""
   
   
-  """==========================================================
-  # NEW: Class Imbalance Check
-  # This calculates and prints the exact % of Default vs Non-Default
-  # =========================================================="""
+  """
+  ==========================================================
+  Class Imbalance Check
+  This calculates and prints the exact % of Default vs Non-Default
+  ==========================================================
+  """
   unique, counts = np.unique(y, return_counts=True)
   total_samples = len(y)
 
