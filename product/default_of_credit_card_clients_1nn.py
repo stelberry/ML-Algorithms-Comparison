@@ -90,10 +90,12 @@ def credit_card_1nn():
   print("Speeded Sampled 1000 Shape:", X.shape)"""
   
   
-  """==========================================================
-  # NEW: Class Imbalance Check
-  # This calculates and prints the exact % of Default vs Non-Default
-  # =========================================================="""
+  """
+  ==========================================================
+  Class Imbalance Check
+  This calculates and prints the exact % of Default vs Non-Default
+  ==========================================================
+  """
   unique, counts = np.unique(y, return_counts=True)
   total_samples = len(y)
 

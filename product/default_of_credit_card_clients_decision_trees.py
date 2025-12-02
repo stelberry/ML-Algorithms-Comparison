@@ -78,10 +78,12 @@ def run_credit_card_tree():
   X, y = resample(X, y, n_samples=2000, random_state=2802, stratify=y)"""
 
 
-  """==========================================================
-  # NEW: Class Imbalance Check
-  # This calculates and prints the exact % of Default vs Non-Default
-  # =========================================================="""
+  """
+  ==========================================================
+  Class Imbalance Check
+  This calculates and prints the exact % of Default vs Non-Default
+  ==========================================================
+  """
   unique, counts = np.unique(y, return_counts=True)
   total_samples = len(y)
 

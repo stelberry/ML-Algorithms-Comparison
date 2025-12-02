@@ -35,7 +35,7 @@ FEATURES (23 total):
    - -2 = didn't use the card so nothing to pay (no consumption)
    - -1 = used the card but paid the entire balance on time.
    - 0 = paid the minimum amount required but not the full balance. Not overdue but carrying a balance forward.
-   - 1 = one month delay....9 = nine months delay.
+   - 1 = one month delay....8 = eight months delay.
    
 3. Bill Amounts (6 features): BILL_AMT1 to BILL_AMT6
    - How much money was billed to the customer in that month
@@ -67,13 +67,52 @@ def credit_card_knn():
   print("Dataset shape:", df.shape)
   print("\nFirst few rows:")
   print(df.head())
+  print("\n===========================================")
   print("\nDataset info:")
   print(df.info())
+  print("\n===========================================")
   
   target_name = 'default payment next month'
   
-    # drop 'ID' column as it is not a feature
+  """
+  ==========================================================
+  Renaming Columns
+  The dataset has 'PAY_0' but then skips to 'PAY_2'.
+  Rename 'PAY_0' -> 'PAY_1' to be consistent.
+  ==========================================================
+  """
+  print("\nColumns before rename:")
+  print(df.columns.tolist())
+  df.columns = df.columns.str.strip()
+  
+  print("\n--- Renaming Columns ---")
+  df.rename(columns={'PAY_0': 'PAY_1'}, inplace=True)
+  print("\nColumns after rename:")
+  print(df.columns.tolist())
+  print("\n===========================================")
 
+
+  """
+  ==========================================================
+  Data Cleaning (Handling Undocumented Labels)
+  Education: 0, 5, 6 are unlabelled. Group them into 4 (Others)
+  Marriage: 0 is unlabelled. Group it into 3 (Others)
+  ==========================================================
+  """
+  print("\n--- Cleaning Undocumented Labels ---")
+  
+  # check counts before cleaning
+  print("Education values before:", np.sort(df['EDUCATION'].unique()))
+  print("Marriage values before:", np.sort(df['MARRIAGE'].unique()))
+  
+  df['EDUCATION'] = df['EDUCATION'].replace({0: 4, 5: 4, 6: 4})
+  df['MARRIAGE'] = df['MARRIAGE'].replace({0: 3})
+  
+  print("\nEducation values after:", np.sort(df['EDUCATION'].unique()))
+  print("Marriage values after:", np.sort(df['MARRIAGE'].unique()))
+  print('\n========================================')
+  
+  # drop 'ID' column as it is not a feature
   if 'ID' in df.columns:
         df = df.drop('ID', axis=1)
     
@@ -86,24 +125,31 @@ def credit_card_knn():
   # split data into training set (75%) and testing set (25%)
   X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=2802, stratify=y)
   
+  
   """
+  =====================================================
   transform all features to be in range [0, 1]
   without scaling, features with larger values such as 
   credit limit: 10,000-1,000,000 dominate the distance calculation
   over small values like Age: 20-80
+  =====================================================
   """
   scaler = MinMaxScaler()
   X_train = scaler.fit_transform(X_train) # learn the scaling from training data
   X_test = scaler.transform(X_test) # apply same scaling to test data
   
-  print(f"\nOriginal Training data shape: {X_train.shape}")
+  
+  print(f"Original Training data shape: {X_train.shape}")
   print(f"Original Testing data shape: {X_test.shape}")
+  print("\n============================================")
   
   
-  """==========================================================
-  # NEW: Class Imbalance Check
-  # This calculates and prints the exact % of Default vs Non-Default
-  # =========================================================="""
+  """
+  ==========================================================
+  Class Imbalance Check
+  This calculates and prints the exact % of Default vs Non-Default
+  ==========================================================
+  """
   unique, counts = np.unique(y, return_counts=True)
   total_samples = len(y)
 
@@ -118,6 +164,7 @@ def credit_card_knn():
           print(f"Default (1):     {count} samples ({percent}%)")
       else:
           print(f"Non-Default (0): {count} samples ({percent}%)")
+  print("\n======================================================")
           
           
   """
@@ -160,7 +207,7 @@ def credit_card_knn():
         best_k = k
     
   print(f"\n>>>>Tuning COMPLETE. Best k found: {best_k} (Accuracy: {best_accuracy})")
-  
+  print("\n==================================================")
   """
   =================================================================
   Final Evaluation
