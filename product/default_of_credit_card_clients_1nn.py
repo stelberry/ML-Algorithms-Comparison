@@ -27,15 +27,21 @@ FEATURES (23 total):
    - MARRIAGE: Marital status (1=married, 2=single, 3=others)
    - AGE: Age in years
 
-2. Payment History (6 features): PAY_0 to PAY_6
+2. Repayment Status (6 features): PAY_0 to PAY_6
    - Repayment status from April to September 2005
-   - Values indicate months of payment delay
-   - -2,-1,0 = pay on time, 1 = one month delay, 2 = two months delay, etc.
+   - These columns indicate if a customer paid on time or delayed payment for that specific month.
+   - PAY_0: September....PAY_6: April
+   - -2 = didn't use the card so nothing to pay (no consumption)
+   - -1 = used the card but paid the entire balance on time.
+   - 0 = paid the minimum amount required but not the full balance. Not overdue but carrying a balance forward.
+   - 1 = one month delay....8 = eight months delay.
 
 3. Bill Amounts (6 features): BILL_AMT1 to BILL_AMT6
+   - How much money was billed to the customer in that month
    - Amount of bill statement from April to September 2005 (NT dollars)
    
-4. Previous Payments (6 features): PAY_AMT1 to PAY_AMT6
+4. Previous Payment Amount (6 features): PAY_AMT1 to PAY_AMT6
+   - how much the customer actually paid in that month to settle their previous bill
    - Amount of previous payment from April to September 2005 (NT dollars)
 
 
@@ -59,8 +65,6 @@ def credit_card_1nn():
   print("Dataset shape:", df.shape)
   print("\nFirst few rows:")
   print(df.head())
-  print("\nColumn names:")
-  print(df.columns.tolist())
   print("\nDataset info:")
   print(df.info())
   
