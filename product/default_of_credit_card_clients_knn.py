@@ -76,7 +76,7 @@ def credit_card_knn():
   
   """
   ==========================================================
-  Renaming Columns
+  Renaming Column
   The dataset has 'PAY_0' but then skips to 'PAY_2'.
   Rename 'PAY_0' -> 'PAY_1' to be consistent.
   ==========================================================
@@ -85,7 +85,7 @@ def credit_card_knn():
   print(df.columns.tolist())
   df.columns = df.columns.str.strip()
   
-  print("\n--- Renaming Columns ---")
+  print("\n--- Renaming Column ---")
   df.rename(columns={'PAY_0': 'PAY_1'}, inplace=True)
   print("\nColumns after rename:")
   print(df.columns.tolist())
