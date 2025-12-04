@@ -21,27 +21,29 @@ TARGET VARIABLE:
 
 FEATURES (23 total):
 
-1. Demographics (4 features):
-   - LIMIT_BAL: Credit amount in NT dollars (includes individual and family credit)
+1. Limit Balance/Credit Limit: LIMIT_BAL
+   - Amount of give credit in NT dollars
+
+2. Demographics (4 features):
    - SEX: Gender (1=male, 2=female)
-   - EDUCATION: Education level (1=graduate school, 2=university, 3=high school, 4=others)
+   - EDUCATION: Education level (1=graduate school, 2=university, 3=high school, 4=others, 5=unknown, 6=unknown)
    - MARRIAGE: Marital status (1=married, 2=single, 3=others)
    - AGE: Age in years
 
-2. Repayment Status (6 features): PAY_0 to PAY_6
+3. Repayment Status (6 features): PAY_0 to PAY_6
    - Repayment status from April to September 2005
    - These columns indicate if a customer paid on time or delayed payment for that specific month.
    - PAY_0: September....PAY_6: April
    - -2 = didn't use the card so nothing to pay (no consumption)
-   - -1 = used the card but paid the entire balance on time.
-   - 0 = paid the minimum amount required but not the full balance. Not overdue but carrying a balance forward.
-   - 1 = one month delay....8 = eight months delay.
-
-3. Bill Amounts (6 features): BILL_AMT1 to BILL_AMT6
+   - -1 = paid the entire balance on time
+   -  0 = paid the minimum amount required but not the full balance. Not overdue but carrying a balance forward.
+   -  1 = one month delay....8 = eight months delay
+   
+4. Bill Amounts (6 features): BILL_AMT1 to BILL_AMT6
    - How much money was billed to the customer in that month
    - Amount of bill statement from April to September 2005 (NT dollars)
    
-4. Previous Payment Amount (6 features): PAY_AMT1 to PAY_AMT6
+5. Previous Payment Amount (6 features): PAY_AMT1 to PAY_AMT6
    - how much the customer actually paid in that month to settle their previous bill
    - Amount of previous payment from April to September 2005 (NT dollars)
 
