@@ -2,8 +2,8 @@ import matplotlib.pyplot as plt
 
 def tie_breaking_comparison():
     # data 
-    strategies = ['Random Selection \n(best k=3)', 'Alphabetical/Numerical Priority \n(best k=9)', 'Distance-Based \n(best k=10)']
-    accuracies = [0.7305, 0.8049, 0.8049] 
+    strategies = ['Random Selection \n(best k=11)', 'Alphabetical/Numerical Priority \n(best k=11)', 'Distance-Based \n(best k=11)']
+    accuracies = [0.7229, 0.8077, 0.8077] 
     
     # setup the colors 
     colors = ['#FFA528', '#A168FC', '#9BBB59'] 
