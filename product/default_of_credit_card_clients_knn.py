@@ -177,9 +177,9 @@ def credit_card_knn():
           
           
   """
-  =====================================
+  ==============================================================
   Hyperparameter Tuning (find the best k which output the least error rate)
-  ====================================
+  ==============================================================
   """
   print("\n--- Starting Hyperparameter Tuning ---")
   
@@ -194,7 +194,7 @@ def credit_card_knn():
 
   # k values from 2 to 50
   # for manual grid search loop
-  k_values = list(range(2, 51)) 
+  k_values = list(range(2, 101)) 
   best_k = 3
   best_accuracy = 0
     

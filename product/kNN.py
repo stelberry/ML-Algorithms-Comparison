@@ -31,8 +31,8 @@ def predict_knn(dataset, labels, test_point, k):
   return prediction
   """
   
-  """# choose alphabetically 
-  #this counts votes, but breaks ties alphabetically (e.g., 'A' wins 'B').
+  """# choose alphabetically/numerical priority 
+  #this counts votes, but breaks ties alphabetically/numerical priority (e.g., 'A' wins 'B'/smallest number wins).
   unique_labels, counts = np.unique(k_nearest_labels, return_counts = True)
   max_count_index = np.argmax(counts)
   prediction = unique_labels[max_count_index]

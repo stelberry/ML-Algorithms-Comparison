@@ -128,7 +128,7 @@ def credit_card_1nn():
   # uncomment this section to use only 1,000 samples for faster testing
   # since 30,000 rows is too slow for a simple 1NN loop, I sample 1,000 rows for testing.
   # stratify=y to keep the same % of default/non-default.
-  """X, y = resample(X, y, n_samples=1000, random_state=0, stratify=y)
+  """X, y = resample(X, y, n_samples=1000, random_state=2802, stratify=y)
   print("Speeded Sampled 1000 Shape:", X.shape)"""
   
   
@@ -155,7 +155,7 @@ def credit_card_1nn():
           
           
   # split data into training set (75%) and testing set (25%)
-  X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=0, stratify=y)
+  X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=2802, stratify=y)
   
   """
   transform all features to be in range [0, 1]
