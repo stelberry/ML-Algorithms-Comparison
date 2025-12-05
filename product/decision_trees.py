@@ -2,8 +2,8 @@ import numpy as np
 from collections import Counter
 
 class Node: 
-  """A helper class to store tree info instead of using confusing strings."""
-  def __init__(self, feature = None, threshold = None, left = None, right = None, value = None):
+  def __init__(self, feature = None, threshold = None, 
+              left = None, right = None, value = None):
     self.feature = feature
     self.threshold = threshold
     self.left = left
@@ -70,7 +70,7 @@ class DecisionTreesCART:
         return left_mask, right_mask
 
   def find_best_split(self, features, labels, n_features):
-    """Loops through all features to find the split with the lowest impurity."""
+    """Loops through all features(columns) to find the split with the lowest impurity."""
     
     best_impurity = float('inf') #start with inifinity
     best_split = None
@@ -163,9 +163,35 @@ class DecisionTreesCART:
                 return self._traverse_tree(features, node.left)
             else:
                 return self._traverse_tree(features, node.right)
-    
+
   def predict(self, features):
     """Make predictions for multiple samples."""
     X = np.array(features)
     return np.array([self._traverse_tree(x, self.root) for x in X]) 
-  
+    
+  def print_tree(self, node, depth=0, feature_names=None):
+    """
+    Recursively prints the decision tree structure.
+    """
+    indent = "  " * depth
+    if node.is_leaf():
+        print(f"{indent}--> Leaf: Class {node.value}")
+        return
+
+    feature_label = f"Feature_{node.feature}"
+    if feature_names is not None:
+        feature_label = feature_names[node.feature]
+    
+    operator = "<="
+    if isinstance(node.threshold, str):
+        operator = "=="
+        
+    print(f"{indent}[{feature_label} {operator} {node.threshold}]")
+    
+    print(f"{indent}  True Path:")
+    self.print_tree(node.left, depth + 1, feature_names)
+    
+    print(f"{indent}  False Path:")
+    self.print_tree(node.right, depth + 1, feature_names)
+    
+        
