@@ -200,7 +200,7 @@ def credit_card_knn():
   # ****Grid Search Start****
   # k values from 2 to 100
   # for manual grid search loop
-  k_values = list(range(2, 101)) 
+  k_values = list(range(1, 101)) 
   best_k = 3
   best_accuracy = 0
     
@@ -244,8 +244,6 @@ def credit_card_knn():
     
   print("\n---------------- RESULTS ----------------")
   print(f"The best k:", best_k)
-  print("Predicted labels (first 10): ", y_pred[:10])
-  print("Actual labels (first 10):    ", y_test[:10])
   print("Accuracy score:", accuracy_score)
   print("Error rate:",error_rate)
 
