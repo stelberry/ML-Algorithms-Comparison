@@ -20,7 +20,7 @@ def predict_knn(dataset, labels, test_point, k):
   k_indicies = sort_indicies[:k]
   #print("k indicies:", k_indicies)
   
-  # get the actual labels (e.g. 'A', 'B') for the k-closest neighbors
+  # get the actual labels (e.g. 'A', 'B'/ '0', '1') for the k-closest neighbors
   # this list is automatically sorted by distance (closest first)
   k_nearest_labels = labels[k_indicies]
   #print("k nearest labels:", k_nearest_labels)
@@ -28,11 +28,10 @@ def predict_knn(dataset, labels, test_point, k):
   """# randomly selecting label
   #this just picks one random neighbor from the k-list. It doesn't vote.
   prediction = np.random.choice(k_nearest_labels)
-  return prediction
-  """
+  return prediction"""
   
-  """# choose alphabetically 
-  #this counts votes, but breaks ties alphabetically (e.g., 'A' wins 'B').
+  """# choose alphabetically/numerical priority 
+  #this counts votes, but breaks ties alphabetically/numerical priority (e.g., 'A' wins 'B'/smallest number wins).
   unique_labels, counts = np.unique(k_nearest_labels, return_counts = True)
   max_count_index = np.argmax(counts)
   prediction = unique_labels[max_count_index]
@@ -44,11 +43,14 @@ def predict_knn(dataset, labels, test_point, k):
   #    it remembers the order it saw them (C was closer than A).
   
   # 2. .most_common(1) picks the one it saw first.
-  #    this automatically breaks the tie by distance.
+  # since k_nearest_labels is sorted by distance, this naturally breaks ties by choosing the closest neighbor
   most_common = Counter(k_nearest_labels).most_common(1)
   
+  #if len(most_common) > 1 and most_common[0][1] == most_common[1][1]:
+    #print(f"TIE DETECTED! k={k}, labels={k_nearest_labels}, winner={most_common[0][0]}")
+  
   # get the winning label (e.g., 'C') from the list [('C', 2)]
-  prediction = most_common[0][0] 
+  prediction = most_common[0][0]
   return prediction
   
 """
@@ -58,6 +60,6 @@ label = np.array(['A','B','A','C','B','A','C'])
 test_point = [3,2]
 
 # run the prediction using k=5
-prediction = predict_kNN(data, label, test_point, k=5)
+prediction = predict_knn(data, label, test_point, k=5)
 print("Predicted label:", prediction)
 """

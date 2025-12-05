@@ -53,6 +53,7 @@ DATASET CHARACTERISTICS:
 - Mix of categorical (sex, education, marriage) and continuous features
 - Feature scales vary widely (age: 20-80, credit limit: 10,000-1,000,000)
 """
+
 def run_credit_card_tree():
   filename = 'product/default_of_credit_card_clients.xls'
     
@@ -107,17 +108,21 @@ def run_credit_card_tree():
   print("Marriage values after:", np.sort(df['MARRIAGE'].unique()))
   print('\n========================================')
   
+  """cat_features = ['SEX', 'EDUCATION', 'MARRIAGE', 'PAY_1', 'PAY_2', 'PAY_3', 'PAY_4', 'PAY_5', 'PAY_6']
   
+  for col in cat_features:
+    df[col] = df[col].astype(str)"""
+      
   if 'ID' in df.columns:
     df = df.drop('ID', axis=1)
         
   X = df.drop(target_name, axis=1).values
   y = df[target_name].values
   
-  """# training a custom Python decision tree on 30,000 rows is very slow.
+  # training a custom Python decision tree on 30,000 rows is very slow.
   # I sample 2,000 rows for development.
-  print("2,000 samples for speed...")
-  X, y = resample(X, y, n_samples=2000, random_state=2802, stratify=y)"""
+  """print("2,000 samples for speed...")
+  X, y = resample(X, y, n_samples=3000, random_state=2802, stratify=y)"""
 
 
   """
@@ -143,7 +148,7 @@ def run_credit_card_tree():
           
           
   X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=2802, stratify=y)
-  print(f"Training on {len(X_train)} samples...")
+  print(f"\nTraining on {len(X_train)} samples...")
   print(f"Testing on {len(X_test)} samples...\n")
   
   criterions = ['gini', 'entropy']
@@ -157,7 +162,20 @@ def run_credit_card_tree():
     
     print("Building the tree (this may take a moment)...")
     my_tree.fit(X_train, y_train)
+
+    """
+    Visualize the tree
+    """
+    print("\n" + "="*30)
+    print("DECISION TREE STRUCTURE")
+    print("="*30)
     
+    # get the column names so it says "PAY_1" instead of "Feature 5"
+    feature_list = df.drop(target_name, axis=1).columns.tolist()
+    
+    my_tree.print_tree(my_tree.root, feature_names=feature_list)
+    print("="*30 + "\n")
+        
     print("Making predictions....")
     predictions = my_tree.predict(X_test)
     

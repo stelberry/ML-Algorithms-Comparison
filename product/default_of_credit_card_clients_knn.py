@@ -177,24 +177,30 @@ def credit_card_knn():
           
           
   """
-  =====================================
+  ==============================================================
   Hyperparameter Tuning (find the best k which output the least error rate)
-  ====================================
+  ==============================================================
   """
   print("\n--- Starting Hyperparameter Tuning ---")
   
   # since 30,000 rows is too slow for a simple kNN loop, I sample 3,000 rows for testing.
-  X_tune, y_tune = resample(X_train, y_train, n_samples=3000, random_state=2802, stratify=y_train)
   
-  X_tune_train, X_tune_test, y_tune_train, y_tune_test = train_test_split(X_tune, y_tune, test_size=0.25, random_state=2802, stratify=y_tune)
+  X_tune, y_tune = resample(X_train, y_train, n_samples=3000, 
+                   replace=False, random_state=2802, stratify=y_train)
+  
+  X_tune_train, X_tune_test, y_tune_train, y_tune_test = train_test_split(X_tune, y_tune, 
+                                                         test_size=0.25, random_state=2802, 
+                                                         stratify=y_tune)
   
   print(f"\nResampled Training data shape: {X_tune_train.shape}")
   print(f"Resampled Testing data shape: {X_tune_test.shape}")
   print()
 
-  # k values from 2 to 50
+
+  # ****Grid Search Start****
+  # k values from 2 to 100
   # for manual grid search loop
-  k_values = list(range(2, 51)) 
+  k_values = list(range(1, 101)) 
   best_k = 3
   best_accuracy = 0
     
@@ -205,9 +211,7 @@ def credit_card_knn():
     for point in X_tune_test:
       pred = predict_knn(X_tune_train, y_tune_train, point, k)
       temp_preds.append(pred)
-  
-    y_pred_small = np.array(temp_preds)
-    
+      
     accuracy = np.mean(temp_preds == y_tune_test) 
     print(f"Tested k={k}: Accuracy = {accuracy}")
 
@@ -217,6 +221,8 @@ def credit_card_knn():
     
   print(f"\n>>>>Tuning COMPLETE. Best k found: {best_k} (Accuracy: {best_accuracy})")
   print("\n==================================================")
+  #****Grid Search End****
+  
   """
   =================================================================
   Final Evaluation
@@ -238,8 +244,6 @@ def credit_card_knn():
     
   print("\n---------------- RESULTS ----------------")
   print(f"The best k:", best_k)
-  print("Predicted labels (first 10): ", y_pred[:10])
-  print("Actual labels (first 10):    ", y_test[:10])
   print("Accuracy score:", accuracy_score)
   print("Error rate:",error_rate)
 
