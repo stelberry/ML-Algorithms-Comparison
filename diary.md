@@ -1,13 +1,30 @@
-## Week 10 (1-2/12/2025)
+## Week 10 (2/12/2025)
 
 - Addressed the limitation of using a hardcoded value **(k=5)** in the k-NN algorithm.
 - I implemented a search strategy to determine the optimal number of neighbors instead of using an most likely sweet spot.
 - Efficiency Strategy: Since running the custom algorithm on the full dataset (30,000 samples) is slow, I implemented `resample` for the tuning phase. I reduced the data to a `3,000-sample` subset, using `stratify` to maintain the correct class balance **(22% default rate)**.
-- Implementation: Created a manual `Grid Search` loop to test a list of k integers from `2 to 50`. The system iterates through each value, calculates accuracy, and stores the `best_k`.
+- Implementation: Created a manual `Grid Search` loop to test a list of k integers from `1 to 100`. The system iterates through each value, calculates accuracy, and stores the `best_k`.
 - Final Output: Updated the main prediction loop to apply the found `best_k` to the `full X_test` set. This ensures the final results are based on optimized parameters.
+
+## Week 10 (30-1/12/2025)
+
+- Read chapter 6: Algorithm Chains and Pipelines from **Introduction to machine learning with Python: a guide for data scientists by Müller, A.C. and Guido, S.**.
+- Learned:
+  - **Data Leakage in Preprocessing**: Discovered a critical flaw in the **naive** approach of applying scaling (like MinMaxScaler) to the full dataset before splitting for Cross-Validation. This causes information from the test set (min/max values) to leak into the training process, leading to overly optimistic performance estimates.
+  - **The Pipeline Solution**: Learned about the Pipeline class, which chains multiple processing steps (e.g., Scaler → Classifier) into a single object. This ensures that during Cross-Validation, the scaler is "fit" only on the training folds and then applied to the test folds, strictly preventing data leakage.
+  - **Grid Searching Pipelines**: Studied how to tune parameters for the entire workflow at once. Using the syntax `step_name__parameter`, GridSearchCV can optimize both the model parameters (like k in k-NN) and preprocessing parameters (like polynomial degrees) simultaneously.
+
+## Week 10 (29/11/2025)
+
+- Read chapter 5: Model Evaluation and Improvement from **Introduction to machine learning with Python: a guide for data scientists by Müller, A.C. and Guido, S.**.
+  - Learned:
+    - **Cross-Validation**: Understood that a single train-test split can yield misleading results if the split is "lucky" or "unlucky". Learned that **Stratified k-Fold Cross-Validation** is essential for **classification** to ensure each fold maintains the same class proportions as the original dataset.
+    - **Grid Search**: Studied how to systematically improve model generalization by **tuning parameters** (k in neighbors) using `GridSearchCV`, which tries all possible combinations of parameters.
+    - **Evaluation Metrics**: Explored **Confusion Matrices** to visualize False Positives and False Negatives, and derived metrics like **Precision **(limiting false positives) and **Recall** (avoiding false negatives)
 
 ## Week 9 (27/11/2025)
 
+- Learned that accuracy is an inadequate metric when one class is much more frequent than the other (e.g., a 9:1 imbalance), as a dummy classifier predicting the majority class can achieve high accuracy without learning anything.
 - Selected the **Default of Credit Card Clients** dataset from the UCI Machine Learning Repository (30,000 samples, 23 features).
 - I chose this dataset because it represents a imbalanced binary classification problem (22% Default vs 78% Non-Default), which poses a significant challenge for standard algorithms compared to simple datasets.
 - I identified that the features had different scales (e.g, Credit Limit: 500,000 vs. Age: 30). Therefore, I implemented **Min-Max Normalization** to scale all features between 0-1, ensuring that the k-NN distance calculation would not be biased toward high-value features.
