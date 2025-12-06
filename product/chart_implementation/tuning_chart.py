@@ -28,8 +28,8 @@ def generate_hyperparameter_tuning():
     plt.text(3, 0.704, "Overfitting\n(Low k)", ha='left', color='grey')
     plt.text(105, 0.784, "Underfitting\n(High k)", ha='center', color='grey')
 
-    plt.savefig('chart_tuning_curve.png', dpi=300)
-    print("Saved: chart_tuning_curve.png")
+    plt.savefig('product/chart_implementation/tuning_curve.png', dpi=300)
+    print("Saved: tuning_curve.png")
 
 if __name__ == "__main__":
     generate_hyperparameter_tuning()
