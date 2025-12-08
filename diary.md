@@ -1,3 +1,16 @@
+## Week 10 (3-5/12/2025)
+
+- Plotted class imbalance pie chart
+- Renamed PAY_0 to PAY_1 to avoid the inconsistency in naming
+- The dataset contains undocumented values in the Education and Marriage columns
+  - Education: 0,5,6 are unlabelled. So, I group them into 4 (Others)
+  - Marriage: 0 is unlabelled. So, I group it into 3 (Others)
+- Plotted Tie-breaking strategy comparison bar chart
+- Plotted tuning curve using seaborn
+- Plotted final result comparison bar chart using seaborn
+- added print_tree function to debug the tree growth process and confirm the 'Unified Splitting' mechanism is handling mixed data types correctly.
+- added presentation file in the documents folder
+
 ## Week 10 (2/12/2025)
 
 - Addressed the limitation of using a hardcoded value **(k=5)** in the k-NN algorithm.
