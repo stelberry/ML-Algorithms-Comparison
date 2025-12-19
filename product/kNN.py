@@ -38,12 +38,10 @@ def predict_knn(dataset, labels, test_point, k):
   return prediction"""
   
   # choose by distance
-  # this counts votes. In a tie, it picks the neighbor that was closest.
-  # 1. Counter() counts votes (e.g., {'C': 2, 'A': 2, 'B': 1})
-  #    it remembers the order it saw them (C was closer than A).
-  
-  # 2. .most_common(1) picks the one it saw first.
-  # since k_nearest_labels is sorted by distance, this naturally breaks ties by choosing the closest neighbor
+  # 1. Counter() counts votes (e.g., {'C': 2, 'A': 2, 'B': 1})  
+    #Python's Counter respects order
+  # 2. .most_common(1) picks the first one.
+  # since "k_nearest_labels" is sorted by distance, this naturally breaks ties by choosing the closest neighbor
   most_common = Counter(k_nearest_labels).most_common(1)
   
   #if len(most_common) > 1 and most_common[0][1] == most_common[1][1]:

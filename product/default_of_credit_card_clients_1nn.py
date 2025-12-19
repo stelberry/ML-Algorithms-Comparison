@@ -5,6 +5,8 @@ from sklearn.utils import resample
 from one_nn import predict_1nn
 import os
 from sklearn.preprocessing import MinMaxScaler
+import time
+
 """
 UCI Default of Credit Cart Clients Dataset
 ================================
@@ -173,12 +175,19 @@ def credit_card_1nn():
       
   # create empty list to store all predictions
   evaluation_arr = []
+  
+  t_pred_start = time.perf_counter()
+
   print("\nStarting predictions (this might take a moment)...")
   print()
   
   for test_point in X_test:
     predict = predict_1nn(X_train, y_train, test_point)
     evaluation_arr.append(predict)
+    
+  t_pred_end = time.perf_counter()
+  pred_time = t_pred_end - t_pred_start
+
     
   y_pred = np.array(evaluation_arr)
   
@@ -190,6 +199,10 @@ def credit_card_1nn():
   print("Actual labels (first 10):    ", y_test[:10])
   print("Accuracy score:", accuracy_score)
   print("Error rate:",error_rate)
+  
+  print("\n---------------- RUNTIME ----------------")
+  print(f"[Runtime] Prediction time (full test set): {pred_time:.4f} seconds")
+  print(f"[Runtime] Avg per test sample: {pred_time/len(X_test):.6f} seconds")
   
   
   

@@ -4,23 +4,42 @@ from collections import Counter
 class Node: 
   def __init__(self, feature = None, threshold = None, 
               left = None, right = None, value = None):
+              
+    # the column index used to split the data
     self.feature = feature
+    
+    # the value used to split (e.g., if age > 25)
     self.threshold = threshold
+    
+    # the node where data goes if the condition is true
     self.left = left
+    
+    # the node where data goes if the condition is false
     self.right = right
+    
+    # if this is a final leaf node, this holds the prediction class
     self.value = value
     
+  # helper to check the end of a branch
   def is_leaf(self):
     return self.value is not None
     
 class DecisionTreesCART:
   def __init__(self, max_depth=10, min_samples=2, criterion = 'gini'):
+  
+        # stops the tree from growing too complex (overfitting)
         self.max_depth = max_depth
+        
+        # stops splitting if there aren't enough items
         self.min_samples = min_samples
+      
         self.root = None
+        
+        # chooses between 'gini' or 'entropy' math
         self.criterion = criterion
         
   def calc_entropy(self, labels):
+    # counts how many of each class there are
     class_names, class_counts = np.unique(labels, return_counts = True)
     probs = class_counts / class_counts.sum()
     probs = probs[probs > 0] # only take logs of probabilities > 0
@@ -34,14 +53,17 @@ class DecisionTreesCART:
     return gini_impurity
 
   def calc_weighted_gini(self, left_labels, right_labels):
+    # total number of items in this split
     total = len(left_labels) + len(right_labels)
     
+    # calculate score for both sides
     gini_left = self.calc_gini_impurity(left_labels)
     gini_right = self.calc_gini_impurity(right_labels)
     
     left_weight = len(left_labels)/total
     right_weight = len(right_labels)/total
     
+    # combine scores based on size
     weighted_gini = (left_weight * gini_left) + (right_weight * gini_right)
   
     return weighted_gini
@@ -61,10 +83,12 @@ class DecisionTreesCART:
     
   def _create_split_masks(self, column_values, threshold):
         """Create boolean masks for splitting data."""
+        # handles text data (categorical)
         if isinstance(threshold, str):
             left_mask = column_values == threshold
             right_mask = column_values != threshold
         else:
+        # handles number data (numerical)
             left_mask = column_values <= threshold
             right_mask = column_values > threshold
         return left_mask, right_mask
@@ -75,13 +99,18 @@ class DecisionTreesCART:
     best_impurity = float('inf') #start with inifinity
     best_split = None
     
+    # loop over every column in the dataset
     for feature_index in range(n_features):
       current_column_values = features[:, feature_index]
+      
+      # get unique values to test as thresholds
       thresholds = np.unique(current_column_values)
       
+      # loop over every unique value in this column
       for threshold in thresholds:
         left_mask, right_mask = self._create_split_masks(current_column_values, threshold)     
         
+        # skip if one side is empty (useless split)
         if np.sum(left_mask) == 0 or np.sum(right_mask) == 0:
           continue
           
@@ -94,6 +123,7 @@ class DecisionTreesCART:
         else:  # entropy
           impurity = self.calc_weighted_entropy(left_labels, right_labels)
         
+        # if this split is cleaner than previous ones, save it
         if impurity < best_impurity:
           best_impurity = impurity
           best_split = {'feature_index': feature_index,
@@ -104,7 +134,8 @@ class DecisionTreesCART:
                         'right_labels': right_labels
                         }
     return best_split
-       
+    
+  # simple voting: returns the most frequent class label    
   def get_most_common_labels(self, labels):
     most_common_labels = Counter(labels).most_common(1)[0][0]
     return Node(value = most_common_labels)
@@ -113,46 +144,47 @@ class DecisionTreesCART:
     n_samples, n_features = features.shape
     n_unique_labels = len(np.unique(labels))
         
-    #Stopping criteria
+    # stopping criteria
+    # checks if we should stop growing the tree
     if (depth >= self.max_depth or
         n_samples < self.min_samples or
         n_unique_labels == 1):
         return self.get_most_common_labels(labels)
-      
+    
+    # find the best question to ask to split data
     best_split = self.find_best_split(features, labels, n_features)
     
+    # if no split was found, return a leaf node
     if best_split is None:
       return self.get_most_common_labels(labels)
     
-    left_child = self.create_tree(
-      best_split['left_features'], 
-      best_split['left_labels'], 
-      depth + 1
-      )
-      
-    right_child = self.create_tree(
-      best_split['right_features'], 
-      best_split['right_labels'], 
-      depth + 1
-      )
-    
+    # recursively build the left branch
+    left_child = self.create_tree(best_split['left_features'], 
+                                  best_split['left_labels'], depth + 1)
+                                  
+    # recursively build the right branch 
+    right_child = self.create_tree(best_split['right_features'], 
+                                  best_split['right_labels'], depth + 1)
+                                  
+    # return the node connecting these two branches
     return Node(feature = best_split['feature_index'],
                 threshold = best_split['threshold'],
-                left = left_child,
-                right = right_child
-                )
+                left = left_child,right = right_child)
       
   def fit(self, features, labels):
+    # starts the whole building process
     self.root = self.create_tree(np.array(features), np.array(labels))
       
   def _traverse_tree(self, features, node):
         """Recursively traverse tree to make prediction for a single sample."""
+        # if we hit the bottom, return the prediction
         if node.is_leaf():
             return node.value
-        
+            
+        # get the value for the feature used in this node
         feature_value = features[node.feature]
         
-        # Handle categorical and numerical features
+        # decide which way to go (left or right) 
         if isinstance(node.threshold, str):
             if feature_value == node.threshold:
                 return self._traverse_tree(features, node.left)
@@ -163,10 +195,11 @@ class DecisionTreesCART:
                 return self._traverse_tree(features, node.left)
             else:
                 return self._traverse_tree(features, node.right)
-
+            
   def predict(self, features):
     """Make predictions for multiple samples."""
     X = np.array(features)
+    # run the traverse function for every row in the data
     return np.array([self._traverse_tree(x, self.root) for x in X]) 
     
   def print_tree(self, node, depth=0, feature_names=None):
