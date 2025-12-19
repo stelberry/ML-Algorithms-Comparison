@@ -4,6 +4,7 @@ from sklearn.model_selection import train_test_split
 from decision_trees import DecisionTreesCART
 import numpy as np
 from sklearn.utils import resample
+import time
 
 
 """
@@ -66,7 +67,6 @@ def run_credit_card_tree():
     print(f"Current folder: {os.getcwd()}")
     return
     
-  #Preprocessing
   target_name = 'default payment next month'
   
   
@@ -161,8 +161,15 @@ def run_credit_card_tree():
     my_tree = DecisionTreesCART(max_depth=5, min_samples=2, criterion=criterion)
     
     print("Building the tree (this may take a moment)...")
-    my_tree.fit(X_train, y_train)
 
+    # ------------------------------
+    # Training time (Decision Tree)
+    # ------------------------------
+    t_train_start = time.perf_counter()
+    my_tree.fit(X_train, y_train)
+    t_train_end = time.perf_counter()
+    train_time = t_train_end - t_train_start
+    
     """
     Visualize the tree
     """
@@ -177,6 +184,15 @@ def run_credit_card_tree():
     print("="*30 + "\n")
         
     print("Making predictions....")
+    
+    # ------------------------------
+    # Prediction time (Decision Tree)
+    # ------------------------------
+    t_pred_start = time.perf_counter()
+    predictions = my_tree.predict(X_test)
+    t_pred_end = time.perf_counter()
+    pred_time = t_pred_end - t_pred_start
+    
     predictions = my_tree.predict(X_test)
     
     y_pred = np.array(predictions)
@@ -195,6 +211,12 @@ def run_credit_card_tree():
       actual = labels[y_test[i]]
       predicted = labels[predictions[i]]
       print(f"Actual: {actual}, Predicted: {predicted}")
+    
+    print("\n---------------- RUNTIME ----------------")
+    print(f"[Runtime] Training time (fit): {train_time:.4f} seconds")
+    print(f"[Runtime] Prediction time (full test set): {pred_time:.6f} seconds")
+    print(f"[Runtime] Avg per test sample: {pred_time/len(X_test):.8f} seconds")
+  
   print()
   
 if __name__ == "__main__":

@@ -5,6 +5,7 @@ from kNN import predict_knn
 import os
 from sklearn.utils import resample
 from sklearn.preprocessing import MinMaxScaler
+import time
 
 """
 UCI Default of Credit Cart Clients Dataset
@@ -198,12 +199,14 @@ def credit_card_knn():
 
 
   # ****Grid Search Start****
-  # k values from 2 to 100
+  # k values from 1 to 100
   # for manual grid search loop
   k_values = list(range(1, 101)) 
   best_k = 3
   best_accuracy = 0
-    
+  
+  t_tune_start = time.perf_counter()
+
   for k in k_values:
   
     # Run prediction on the small validation set
@@ -218,8 +221,13 @@ def credit_card_knn():
     if accuracy > best_accuracy:
         best_accuracy = accuracy
         best_k = k
+        
+  t_tune_end = time.perf_counter()
+  tuning_time = t_tune_end - t_tune_start
+
     
   print(f"\n>>>>Tuning COMPLETE. Best k found: {best_k} (Accuracy: {best_accuracy})")
+  print(f"[Runtime] Hyperparameter tuning time: {tuning_time:.2f} seconds")
   print("\n==================================================")
   #****Grid Search End****
   
@@ -229,14 +237,18 @@ def credit_card_knn():
   Use the best_k to run on the full X_test set
   =================================================================
   """
-  # create empty list to store all predictions
-  evaluation_arr = []
   print(f"\nRunning Final Model on Full Test Set (k={best_k})...")  
   print("This will take a moment as we are processing 7,500 test points...")
   
+  evaluation_arr = []
+  t_pred_start = time.perf_counter()
+  
   for test_point in X_test:
-      predict = predict_knn(X_train, y_train, test_point, best_k)
-      evaluation_arr.append(predict)
+      pred = predict_knn(X_train, y_train, test_point, best_k)
+      evaluation_arr.append(pred)
+      
+  t_pred_end = time.perf_counter()
+  pred_time = t_pred_end - t_pred_start
       
   y_pred = np.array(evaluation_arr) 
   accuracy_score = np.mean(y_pred == y_test)
@@ -246,6 +258,11 @@ def credit_card_knn():
   print(f"The best k:", best_k)
   print("Accuracy score:", accuracy_score)
   print("Error rate:",error_rate)
+
+  print("\n---------------- RUNTIME ----------------")
+  print(f"[Runtime] Hyperparameter tuning time: {tuning_time:.2f} seconds")
+  print(f"[Runtime] Prediction time (full test set): {pred_time:.4f} seconds")
+  print(f"[Runtime] Avg per test sample: {pred_time/len(X_test):.6f} seconds")
 
 
 

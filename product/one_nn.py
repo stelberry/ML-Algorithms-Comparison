@@ -12,9 +12,11 @@ def predict_1nn (dataset, label, test_point):
   
   2nd: np.linalg.norm numpy function compute the norm length(squared each then sum all then sqrt that sum)
   """
+  
   euclidean_distance = np.linalg.norm(dataset - test_point, axis = 1)
-  target = np.argmin(euclidean_distance) #return the index of the smallest value
-  return label[target]
+  
+  target_index = np.argmin(euclidean_distance) #return the index of the smallest value
+  return label[target_index]
 
 """
 dataset = np.array([[1,2],[3,1],[1,1]])
