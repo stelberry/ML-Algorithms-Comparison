@@ -1,3 +1,14 @@
+## Week 11 (8-9/12/2025)
+
+- Added diagrams in the report
+- Finished Literature Survery section
+- Finished Software Engineering Approach section
+
+## Week 10 (6-7/12/2025)
+
+- Skimmed commits in GitLab, diary, notes, and sources I used to reflect
+- Structured the outline for the report
+
 ## Week 10 (3-5/12/2025)
 
 - Plotted class imbalance pie chart
