@@ -111,18 +111,18 @@ The experiments demonstrate clear trade-offs:
 
 ## Future Work
 
-**Extended Evaluation Metrics**
+**Extended Evaluation Metrics**:
 Extend evaluation beyond accuracy by incorporating precision, recall, confusion matrices, and ROC analysis. This is essential for the imbalanced credit card default dataset, where accuracy alone can be misleading.
 
-**Cross-Validation Framework**
+**Cross-Validation Framework**:
 Implement a full k-fold cross-validation pipeline to ensure fair and reproducible performance estimates, with preprocessing performed independently within each fold to prevent data leakage.
 
-**Advanced Classification Algorithms**
+**Advanced Classification Algorithms**:
 Implement more advanced algorithms such as kernel-based k-NN and Support Vector Machines (SVMs) to enable fair comparison with the baseline models developed in this project.
 
-**Graphical User Interface (GUI)**
+**Graphical User Interface (GUI)**:
 Develop a simple graphical user interface to allow users to load datasets, select algorithms and hyperparameters, and visualise predictions and performance metrics without modifying code.
 
-**Systematic Multi-Dataset Evaluation**
+**Systematic Multi-Dataset Evaluation**:
 Evaluate all models on additional benchmark datasets to assess robustness and generalisation across different data distributions.
 
